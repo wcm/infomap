@@ -1,11 +1,14 @@
 {
-  "homepage" : "http://wcm.github.io/infomap",
+  "homepage": "http://wcm.github.io/infomap",
   "name": "infomap",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "mapbox-gl": "^0.51.0",
+    "node-sass": "^4.10.0",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3"
+    "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",

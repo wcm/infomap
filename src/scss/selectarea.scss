@@ -1,0 +1,14 @@
+@import 'global';
+.content-wrapper{
+	width: 100%;
+	.title{
+		margin: 10px 0;
+		display: inline-block;
+		font-family: $fonts_title;
+		font-size: 24px;
+		color: $primary;
+	}
+	.map {
+		height: 500px;
+	}
+}
