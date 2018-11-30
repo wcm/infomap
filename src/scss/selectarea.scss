@@ -9,6 +9,33 @@
 		color: $primary;
 	}
 	.map {
-		height: 500px;
+		width: 100%;
+		height: 600px;
+		position: relative;
+	}
+	.control{
+		z-index: 3;
+		position: absolute;
+		left: 10px;
+		top:60px;
+	}
+	.selector{
+		z-index: 1;
+		position:absolute;
+		top: 0;
+		left:0;
+		width: 100%;
+		height: 100%;
+		.handler{
+			position:absolute;
+			height: 12px;
+			width: 12px;
+			background-color: white;
+			border: solid 1px $primary;
+			cursor: move
+		}
+		.shader{
+			background-color: rgba(0,0,0,.15)
+		}
 	}
 }

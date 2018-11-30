@@ -9,14 +9,15 @@ import About from './modules/About';
 import Maps from './modules/Maps';
 import './scss/base.scss';
 
+
 ReactDOM.render((
 <Router>
 	<div className = 'content'>
 		<Header/>
-		<Route exact path = '/' component = {SelectArea} />
-		<Route exact path = '/help' component = {Help} />
-		<Route exact path = '/about' component = {About} />
-		<Route exact path = '/selected/:long/:alt/:width/:height' component = {Maps}/>
+		<Route exact path = {process.env.PUBLIC_URL + '/'} component = {SelectArea} />
+		<Route exact path = {process.env.PUBLIC_URL + '/help'} component = {Help} />
+		<Route exact path = {process.env.PUBLIC_URL + '/about'} component = {About} />
+		<Route exact path = {process.env.PUBLIC_URL + '/selected/:wlng/:slat/:elng/:nlat'} component = {Maps}/>
 	</div>
 </Router>
 ), document.getElementById('root'));

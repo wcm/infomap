@@ -1,51 +1,154 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import mapboxgl from 'mapbox-gl'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import MapGL, {NavigationControl} from "react-map-gl";
+import Geocoder from "react-map-gl-geocoder";
+import Selector from './Selector';
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoid2NuZGhyIiwiYSI6ImNqa2h6MHdpZDB6a3gzcG1sZjAzcWRqd2QifQ.QhiUrYs_tD0qN2SiN5bvUg';
+const MAPBOX_TOKEN ="pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
 
-class MapSelection extends React.Component {
+class MapSelection extends Component {
+  	constructor(props: Props) {
+	    super(props);
+	    this.state = {
+	    	viewport: {
+		    	width: '100%',
+		      	height: '600px',
+		      	latitude: 37.7577,
+		      	longitude: -122.4376,
+		      	zoom: 16
+	    	},	
+	    	searchResultLayer: null,
+	    	selector:{
+	    		x: 0,
+	    		y: 0
+	    	},
+	    	isdragging: false,
+	    	selBounds:{
+	    		n: 0,
+	    		s: 0,
+	    		w: 0,
+	    		e: 0
+	    	},
+	    	width: 0
+	  	};
+	  	this.mapRef = React.createRef();
+	};
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      lng: 11.5752,
-      lat: 48.1370,
-      zoom: 16
-    };
-  }
+  	
 
-  componentDidMount() {
-    const { lng, lat, zoom } = this.state;
+  	componentDidMount() {
+    	window.addEventListener("resize", this.resize);
+    	this.resize();
+    	const myMap = this.mapRef.current.getMap();
+    	const bounds = myMap.getBounds();
+    	this.setState({
+	    	selBounds:{
+	    		n: bounds._ne.lat,
+	    		s: bounds._sw.lat,
+				w: bounds._sw.lng,
+	    		e: bounds._ne.lng
+	    	},
+	    	selector:{
+	    		x: window.innerWidth*0.833333/4,
+	    		y: 600/4
+	    	}
+	    })
+  	}
 
-    const map = new mapboxgl.Map({
-      container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/streets-v9',
-      center: [lng, lat],
-      zoom
-    });
+  	componentWillUnmount() {
+    	window.removeEventListener("resize", this.resize);
+  	}
 
-    map.on('move', () => {
-      const { lng, lat } = map.getCenter();
+  	resize = () => {
+  		this.setState({width: window.innerWidth*0.833333})
+    	this.handleViewportChange({
+      	width: '100%',
+    	});
+  	}
 
-      this.setState({
-        lng: lng.toFixed(4),
-        lat: lat.toFixed(4),
-        zoom: map.getZoom().toFixed(2)
-      });
-    });
-  }
+  	handleViewportChange = (viewport) => {
+  		if (this.state.isdragging === false){
+	    	this.setState({
+	    		viewport: { ...this.state.viewport, ...viewport },
+	    	});
+	    	if (this.mapRef.current) {
+	    		const myMap = this.mapRef.current.getMap();
+		    	const bounds = myMap.getBounds();
+		    	this.setState({selBounds:{
+		    		n: bounds._ne.lat,
+		    		s: bounds._sw.lat,
+					w: bounds._sw.lng,
+		    		e: bounds._ne.lng
+		    	}})
 
-  render() {
-    const { lng, lat, zoom } = this.state;
+	    	}
+    	}
+  	}
 
-    return (
-    	<div>
-        	<div ref={el => this.mapContainer = el} className="map" />
-        	<div>{`Longitude: ${lng} Latitude: ${lat} Zoom: ${zoom}`}</div>
-    	</div>
-    );
-  }
+  	handleOnResult = (event) => {
+    	console.log(event.result);
+  	}
+
+  	handleGeocoderViewportChange = (viewport) => {
+    	const geocoderDefaultOverrides = { transitionDuration: 100 };
+		console.log(viewport);
+	    this.handleViewportChange({
+	      	...viewport,
+	      	...geocoderDefaultOverrides,
+	    });
+
+  	}
+
+  	setDragging = (value) => {
+  		this.setState({isdragging: value});
+  	}
+
+  	setXY = (value) => {
+  		this.setState({selector: value});  		
+  	}
+
+  	render() {
+    	const { viewport, searchResultLayer, selector, selBounds } = this.state;
+	    const nlat = selBounds.n - selector.y/600*(selBounds.n-selBounds.s);
+	    const slat = selBounds.s + selector.y/600*(selBounds.n-selBounds.s);
+	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
+	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
+	    return (
+	    	<div className='map'>
+				<MapGL
+				    ref={this.mapRef}
+				    {...viewport}
+				    onViewportChange={this.handleViewportChange}
+				    mapboxApiAccessToken={MAPBOX_TOKEN}
+				    mapStyle='mapbox://styles/mapbox/streets-v9'
+				>
+				<Geocoder
+				    mapRef={this.mapRef}
+				    onResult={this.handleOnResult}
+			        onViewportChange={this.handleGeocoderViewportChange}
+			        mapboxApiAccessToken={MAPBOX_TOKEN}
+			        position="top-left"
+			    />
+		        <div className='control'>
+		        <NavigationControl 
+		        	showCompass={false}
+		          	onViewportChange={this.handleViewportChange} 
+		        />
+		        </div>
+				<Selector
+			    	{...selector}
+			    	setDragging = {this.setDragging}
+			    	setXY = {this.setXY}
+			    />
+
+
+				</MapGL>
+			    <div>Viewport Coordinates: {`n: ${selBounds.n} s: ${selBounds.s} w: ${selBounds.w} e: ${selBounds.e}`}</div>
+		    	<div>Selected Area Coordinates: {`n: ${nlat} s: ${slat} w: ${wlng} e: ${elng}`}</div>
+		    	<Link to={`${process.env.PUBLIC_URL}/selected/${wlng}/${slat}/${elng}/${nlat}`}> Proceed to Analysis </Link>
+		    </div>
+	    );
+  	}
 }
 
 export default MapSelection
