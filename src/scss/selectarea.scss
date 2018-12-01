@@ -14,13 +14,13 @@
 		position: relative;
 	}
 	.control{
-		z-index: 3;
+		z-index: 1;
 		position: absolute;
 		left: 10px;
 		top:60px;
 	}
 	.selector{
-		z-index: 1;
+		z-index: 0;
 		position:absolute;
 		top: 0;
 		left:0;
@@ -31,11 +31,37 @@
 			height: 12px;
 			width: 12px;
 			background-color: white;
-			border: solid 1px $primary;
+			border: solid 2px $primary;
 			cursor: move
 		}
 		.shader{
-			background-color: rgba(0,0,0,.15)
+			background-color: rgba(0,0,0,.15);
 		}
+	}
+	.proceed-button{
+		margin: 18px 0;
+		float: right;
+	}
+	.proceed-alert{
+		float:right;
+		font-weight: 300;
+		margin: 18px;
+		line-height: 50px;
+		&.red{
+			color:red;
+		}
+		&.green{
+			color:green;
+		}
+	}
+	.clearfix{
+		clear:both;
+	}
+	.row{
+		width: 100%;
+	}
+	.raw{
+		padding: 24px 0;
+		border-top: 1px solid $primary_f3;
 	}
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-import Draggable from 'react-draggable';
+import Draggable, { DraggableCore }from 'react-draggable';
 
 class Selector extends Component {
 	constructor(props: Props) {
@@ -25,30 +25,38 @@ class Selector extends Component {
 	  this.setState({ width: window.innerWidth*0.833333 });
 	}
 	
-	updateXY = (handlerID, position) => {
+	updateXY = (handlerID, e, { deltaX, deltaY }) => {
 		if (handlerID === '1') {
-			this.props.setXY({x: position.x-92, y: position.y-132});
+			if (this.props.x+deltaX >= 40 && this.props.x+deltaX <= this.state.width/2-40 && this.props.y+deltaY >= 60 && this.props.y+deltaY <= this.state.height/2-40){
+				this.props.setXY({x: this.props.x+deltaX, y: this.props.y+deltaY});
+			}
 		}else if (handlerID === '2') {
-			this.props.setXY({x: this.state.width-position.x+92, y: position.y-132});						
+			if (this.props.x-deltaX >= 40 && this.props.x-deltaX <= this.state.width/2-40 && this.props.y+deltaY >= 60 && this.props.y+deltaY <= this.state.height/2-40){
+				this.props.setXY({x: this.props.x-deltaX, y: this.props.y+deltaY});
+			}
 		}else if (handlerID === '3') {
-			this.props.setXY({x: position.x-92, y: this.state.height-position.y+132});						
+			if (this.props.x+deltaX >= 40 && this.props.x+deltaX <= this.state.width/2-40 && this.props.y-deltaY >= 60 && this.props.y-deltaY <= this.state.height/2-40){
+				this.props.setXY({x: this.props.x+deltaX, y: this.props.y-deltaY});
+			}
 		}else if (handlerID === '4') {
-			this.props.setXY({x: this.state.width-position.x+92, y: this.state.height-position.y+132});						
+			if (this.props.x-deltaX >= 40 && this.props.x-deltaX <= this.state.width/2-40 && this.props.y-deltaY >= 60 && this.props.y-deltaY <= this.state.height/2-40){
+				this.props.setXY({x: this.props.x-deltaX, y: this.props.y-deltaY});
+			}
 		}
 	}
 
-	handleStart = (handlerID, position) => {
+	handleStart = (handlerID, e, { deltaX, deltaY }) => {
 		this.props.setDragging(true);
-		this.updateXY(handlerID, position);
+		this.updateXY(handlerID, e, { deltaX, deltaY });
 	}
 
-	handleStop = (handlerID, position) => {
+	handleStop = (handlerID, e, { deltaX, deltaY }) => {
 		this.props.setDragging(false);
-		this.updateXY(handlerID, position);
+		this.updateXY(handlerID, e, { deltaX, deltaY });
 	}
 
-	handleDrag = (handlerID, position) => {
-		this.updateXY(handlerID, position);
+	handleDrag = (handlerID, e, { deltaX, deltaY }) => {
+		this.updateXY(handlerID, e, { deltaX, deltaY });
 	}
 
 	render() {
@@ -92,36 +100,30 @@ class Selector extends Component {
 						width: `${ divWidth-this.props.x*2 }px`
 					}}					
 				/>
-		      <Draggable
-		      	//bounds={{top: this.props.y-20, left: this.props.x-20, right: divWidth/2-this.props.x-20, bottom: divHeight/2-this.props.y-20}}
-		      	bounds='parent'
-		        position={{x: this.props.x-6, y: this.props.y-6}}
+		      <DraggableCore
 		        onStart={this.handleStart.bind(this, '1')}
 		        onDrag={this.handleDrag.bind(this, '1')}
 		        onStop={this.handleStop.bind(this, '1')}>
-		        <div className="handler"/>
-		      </Draggable>
-		      <Draggable
-		        position={{x: divWidth-this.props.x-6, y: this.props.y-6}}
+		        <div className="handler" style={{top:this.props.y-6, left:this.props.x-6}}/>
+		      </DraggableCore>
+		      <DraggableCore
 		        onStart={this.handleStart.bind(this, '2')}
 		        onDrag={this.handleDrag.bind(this, '2')}
 		        onStop={this.handleStop.bind(this, '2')}>
-		        <div className="handler"/>
-		      </Draggable>
-		      <Draggable
-		        position={{x: this.props.x-6, y: divHeight-this.props.y-6}}
+		        <div className="handler" style={{top:this.props.y-6, left:divWidth-this.props.x-6}}/>
+		      </DraggableCore>
+		      <DraggableCore
 		        onStart={this.handleStart.bind(this, '3')}
 		        onDrag={this.handleDrag.bind(this, '3')}
 		        onStop={this.handleStop.bind(this, '3')}>
-		        <div className="handler"/>
-		      </Draggable>
-		      <Draggable
-		        position={{x: divWidth-this.props.x-6, y: divHeight-this.props.y-6}}
+		        <div className="handler" style={{top:divHeight-this.props.y-6, left:this.props.x-6}}/>
+		      </DraggableCore>
+		      <DraggableCore
 		        onStart={this.handleStart.bind(this, '4')}
 		        onDrag={this.handleDrag.bind(this, '4')}
 		        onStop={this.handleStop.bind(this, '4')}>
-		        <div className="handler"/>
-		      </Draggable>
+		        <div className="handler" style={{top:divHeight-this.props.y-6, left:divWidth-this.props.x-6}}/>
+		      </DraggableCore>
 			</div>
 		)
 	}

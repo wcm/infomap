@@ -7,4 +7,24 @@ body {
 .content{
 	width: 83.3333%;
 	margin: 0 auto;
+	font-family: $fonts_global;
+}
+
+.button{
+	display:inline-block;
+	height: 50px;
+	line-height: 50px;
+	background-color: $primary;
+	padding: 0 20px;
+	color: white;
+	font-family: $fonts_title;
+	font-size: 24px;
+	text-decoration: none;
+	transition: all .15s ease-in-out;
+	&:hover{
+		background-color: $primary_f1;
+	}	
+	&.button-disabled{
+		background-color: rgba(0,0,0,.4);		
+	}
 }

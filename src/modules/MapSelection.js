@@ -106,6 +106,25 @@ class MapSelection extends Component {
   	setXY = (value) => {
   		this.setState({selector: value});  		
   	}
+	
+	getDistance = (lat1, lon1, lat2, lon2) => {
+	  	var R = 6371e3; // metres
+		var φ1 = lat1* Math.PI / 180;
+		var φ2 = lat2* Math.PI / 180;
+		var Δφ = (lat2-lat1)* Math.PI / 180;
+		var Δλ = (lon2-lon1)* Math.PI / 180;
+
+		var a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+		        Math.cos(φ1) * Math.cos(φ2) *
+		        Math.sin(Δλ/2) * Math.sin(Δλ/2);
+		var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+		return R * c;
+	}
+	
+	getBoundArea = (lat1, lat2, lon1, lon2) => {
+		return this.getDistance(lat1, lon1, lat1, lon2) * this.getDistance(lat1, lon1, lat2, lon1)
+	}
 
   	render() {
     	const { viewport, searchResultLayer, selector, selBounds } = this.state;
@@ -113,6 +132,7 @@ class MapSelection extends Component {
 	    const slat = selBounds.s + selector.y/600*(selBounds.n-selBounds.s);
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
+	    const area = this.getBoundArea(nlat, slat, wlng, elng);
 	    return (
 	    	<div className='map'>
 				<MapGL
@@ -143,9 +163,34 @@ class MapSelection extends Component {
 
 
 				</MapGL>
-			    <div>Viewport Coordinates: {`n: ${selBounds.n} s: ${selBounds.s} w: ${selBounds.w} e: ${selBounds.e}`}</div>
-		    	<div>Selected Area Coordinates: {`n: ${nlat} s: ${slat} w: ${wlng} e: ${elng}`}</div>
-		    	<Link to={`${process.env.PUBLIC_URL}/selected/${wlng}/${slat}/${elng}/${nlat}`}> Proceed to Analysis </Link>
+				{area <= 1000000? 
+					<div className='row'>
+					    <Link to={`${process.env.PUBLIC_URL}/selected/${wlng}/${slat}/${elng}/${nlat}`}> 
+							<div className='button proceed-button'>Proceed to Analysis </div>
+				    	</Link>
+						<div className='proceed-alert green'> You can use this selected region. </div>
+				    </div>
+			    :
+					<div className='row'>
+						<div className='button button-disabled proceed-button'>Proceed to Analysis </div>
+						<div className='proceed-alert red'> Area of the selected region is too big. </div>
+					</div>
+		    	}
+			    <div className='clearfix'/>
+				<div className='raw'>
+				    <div>
+				    	<p>Viewport Coordinates:</p>
+				    	<p> {`n: ${selBounds.n} s: ${selBounds.s} w: ${selBounds.w} e: ${selBounds.e}`}</p>
+				    </div>
+			    	<div>
+			    		<p>Selected Region Coordinates:</p>
+			    		<p> {`n: ${nlat} s: ${slat} w: ${wlng} e: ${elng}`}</p>
+			    	</div>
+			    	<div>
+			    		<p>Selected Region Area:</p>
+			    		<p> {area}</p>
+			    	</div>
+		    	</div>
 		    </div>
 	    );
   	}
