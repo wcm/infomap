@@ -134,7 +134,7 @@ class MapSelection extends Component {
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const area = this.getBoundArea(nlat, slat, wlng, elng);
-	    const isDemo = (this.props.location.pathname === "/demo");
+	    const isDemo = (this.props.location.pathname === `${process.env.PUBLIC_URL}/demo`);
 	    return (
 	    	<div>
 				<MapGL
