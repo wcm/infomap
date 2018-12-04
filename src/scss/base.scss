@@ -10,6 +10,15 @@ body {
 	font-family: $fonts_global;
 }
 
+.title{
+	margin: 10px 0;
+	display: inline-block;
+	font-family: $fonts_title;
+	font-size: 24px;
+	color: $primary;
+	text-decoration: none;
+}
+
 .button{
 	display:inline-block;
 	height: 50px;
@@ -27,4 +36,17 @@ body {
 	&.button-disabled{
 		background-color: rgba(0,0,0,.4);		
 	}
+}
+
+.clearfix{
+	clear:both;
+}
+
+.footer{
+	width: 100%;
+	border-top: 1px solid $primary_f3;
+	padding: 24px 0;
+	color: rgba(0,0,0,.64);
+	font-weight:300;
+	font-size:12;
 }

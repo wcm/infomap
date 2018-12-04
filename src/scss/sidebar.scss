@@ -1,0 +1,74 @@
+@import 'global';
+
+.menu{
+	float:left;
+	font-family: $fonts_title;
+	color: $primary;
+	width: 230px;
+	margin: 12px 0 36px 0;
+	.menu-item{
+		width:100%;
+		font-size: 24px;
+		cursor: pointer;
+		height: 50px;
+		&.selected{
+			background-color: $primary;
+			color:white;
+		&:hover{
+			background-color: $primary;
+		}
+		}
+		&:hover{
+			background-color: $primary_f4;
+		}
+		.menu-title{
+			margin: 0 0 0 16px;
+			float:left;
+			line-height: 50px;
+		}
+	}
+	.submenu{
+		width: 100%;
+		span{
+			float:left;
+		}
+	}
+	.submenu-item{
+		height: 75px;
+		width:100%;
+		font-size: 20px;
+		.submenu-title{
+			margin: 0 0 0 42px;
+			float:left;
+			line-height: 50px;
+		}
+		.slider{
+			input{
+				float:right;
+				margin-right: 16px;
+			}
+			.slider-value{
+				font-size: 16px;
+				float:left;
+				margin-left: 42px;
+			}
+		}
+		.dragHandle{
+			height:20px;
+			width: 20px;
+			background-color: black;
+		}
+	}
+
+	.icon{
+		cursor: pointer;
+		height: 18px;
+		float: right;
+		margin: 16px 16px;
+		fill: $primary;
+		&.selected{
+			fill: white;
+		}
+	}
+
+}

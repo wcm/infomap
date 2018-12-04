@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import MapGL, {NavigationControl} from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
+import {withRouter} from "react-router";
 import Selector from './Selector';
 
 const MAPBOX_TOKEN ="pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA";
@@ -133,41 +134,48 @@ class MapSelection extends Component {
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const area = this.getBoundArea(nlat, slat, wlng, elng);
+	    const isDemo = (this.props.location.pathname === "/demo");
 	    return (
-	    	<div className='map'>
+	    	<div>
 				<MapGL
+					className='map'
 				    ref={this.mapRef}
 				    {...viewport}
 				    onViewportChange={this.handleViewportChange}
 				    mapboxApiAccessToken={MAPBOX_TOKEN}
 				    mapStyle='mapbox://styles/mapbox/streets-v9'
 				>
-				<Geocoder
-				    mapRef={this.mapRef}
-				    onResult={this.handleOnResult}
-			        onViewportChange={this.handleGeocoderViewportChange}
-			        mapboxApiAccessToken={MAPBOX_TOKEN}
-			        position="top-left"
-			    />
-		        <div className='control'>
-		        <NavigationControl 
-		        	showCompass={false}
-		          	onViewportChange={this.handleViewportChange} 
-		        />
-		        </div>
-				<Selector
-			    	{...selector}
-			    	setDragging = {this.setDragging}
-			    	setXY = {this.setXY}
-			    />
-
+					<Geocoder
+					    mapRef={this.mapRef}
+					    onResult={this.handleOnResult}
+				        onViewportChange={this.handleGeocoderViewportChange}
+				        mapboxApiAccessToken={MAPBOX_TOKEN}
+				        position="top-left"
+				    />
+			        <div className='control'>
+			        <NavigationControl 
+			        	showCompass={false}
+			          	onViewportChange={this.handleViewportChange} 
+			        />
+			        </div>
+					<Selector
+				    	{...selector}
+				    	setDragging = {this.setDragging}
+				    	setXY = {this.setXY}
+				    />
 
 				</MapGL>
 				{area <= 1000000? 
 					<div className='row'>
+					{isDemo ?
+					    <Link to={`${process.env.PUBLIC_URL}/demo/selected`}> 
+							<div className='button proceed-button'>Proceed to Analysis </div>
+				    	</Link>
+					:
 					    <Link to={`${process.env.PUBLIC_URL}/selected/${wlng}/${slat}/${elng}/${nlat}`}> 
 							<div className='button proceed-button'>Proceed to Analysis </div>
 				    	</Link>
+				    }
 						<div className='proceed-alert green'> You can use this selected region. </div>
 				    </div>
 			    :
@@ -177,6 +185,9 @@ class MapSelection extends Component {
 					</div>
 		    	}
 			    <div className='clearfix'/>
+			    {isDemo?
+			    	<div/>
+			    :
 				<div className='raw'>
 				    <div>
 				    	<p>Viewport Coordinates:</p>
@@ -191,9 +202,10 @@ class MapSelection extends Component {
 			    		<p> {area}</p>
 			    	</div>
 		    	</div>
+		    	}
 		    </div>
 	    );
   	}
-}
+};
 
-export default MapSelection
+export default withRouter(MapSelection);

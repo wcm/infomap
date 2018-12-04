@@ -1,0 +1,30 @@
+@import 'global';
+
+.maps{
+	width: 100%;
+	.functions{
+		width: 100%;
+		margin: 12px 0;
+	}
+	.back{
+		width: 230px;
+		float:left;
+	}
+	.back-icon{
+		display:inline-block;
+		height:20px;
+		margin:16px 12px;
+		fill: $primary;
+		float:left;
+	}
+	.export-button{
+		float:right;
+	}
+	.map-display{
+		margin: 12px 0 50px 0;
+		width: calc(100% - 270px);
+		float:right;
+		position:relative;
+		min-height: 500px;
+	}
+}

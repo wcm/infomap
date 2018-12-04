@@ -18,5 +18,13 @@
 			font-weight: 300;
 			color: $primary;
 		}
+		.navbar-tabitem-active{
+			display: inline-block;
+			margin: 30px 0 auto 30px;
+			text-decoration: none;
+			font-size: 20px;
+			font-weight: 300;
+			color: $active;
+		}
 	}
 }
