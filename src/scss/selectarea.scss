@@ -31,6 +31,34 @@
 			background-color: rgba(0,0,0,.15);
 		}
 	}
+	.area-number{
+		float:left;
+		margin: 32px 24px 0;
+		font-size: 18px;
+		font-weight: 300;
+		color:$primary;
+	}
+	.area-indicator{
+		margin: 28px 0 0;
+		float: left;
+		z-index: 1;
+		position:relative;
+		height:30px;
+		width: 200px;
+		outline: solid 1px $primary;
+		.area-indicator-fill{
+			z-index: 2;
+			position:absolute;
+			top:0;
+			left: 0;
+			box-shadow: inset 0 0 0 2px white;
+			height:30px;
+			background-color: $primary;
+		}
+		.area-exceed{
+			background-color: rgba(0,0,0,.4);
+		}
+	}
 	.proceed-button{
 		margin: 18px 0;
 		float: right;

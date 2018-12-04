@@ -133,7 +133,7 @@ class MapSelection extends Component {
 	    const slat = selBounds.s + selector.y/600*(selBounds.n-selBounds.s);
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
-	    const area = this.getBoundArea(nlat, slat, wlng, elng);
+	    const area = this.getBoundArea(nlat, slat, wlng, elng).toFixed(2);
 	    const isDemo = (this.props.location.pathname === `${process.env.PUBLIC_URL}/demo`);
 	    return (
 	    	<div>
@@ -167,6 +167,10 @@ class MapSelection extends Component {
 				</MapGL>
 				{area <= 1000000? 
 					<div className='row'>
+						<div className="area-indicator">
+							<div className="area-indicator-fill" style={{width: area/1000000*200}}></div>
+						</div>
+						<div className="area-number">Area: {area} m &#178;</div>
 					{isDemo ?
 					    <Link to={`${process.env.PUBLIC_URL}/demo/selected`}> 
 							<div className='button proceed-button'>Proceed to Analysis </div>
@@ -180,6 +184,10 @@ class MapSelection extends Component {
 				    </div>
 			    :
 					<div className='row'>
+						<div className="area-indicator">
+							<div className="area-indicator-fill area-exceed" style={{width: 200}}></div>
+						</div>
+						<div className="area-number">Area: &#62;1 km &#178;</div>
 						<div className='button button-disabled proceed-button'>Proceed to Analysis </div>
 						<div className='proceed-alert red'> Area of the selected region is too big. </div>
 					</div>
