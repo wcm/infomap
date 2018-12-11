@@ -22,7 +22,8 @@
     "react-leaflet-search": "^0.6.0",
     "react-map-gl": "^4.0.2",
     "react-map-gl-geocoder": "^1.5.5",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "xml-js": "^1.6.8"
   },
   "devDependencies": {
     "gh-pages": "^2.0.1",

@@ -14,9 +14,9 @@ class MapSelection extends Component {
 	    	viewport: {
 		    	width: '100%',
 		      	height: '600px',
-		      	latitude: 37.7577,
-		      	longitude: -122.4376,
-		      	zoom: 16
+		      	latitude: 48.1358,
+		      	longitude: 11.5611,
+		      	zoom: 15
 	    	},	
 	    	searchResultLayer: null,
 	    	selector:{
@@ -50,7 +50,7 @@ class MapSelection extends Component {
 	    		e: bounds._ne.lng
 	    	},
 	    	selector:{
-	    		x: window.innerWidth*0.833333/4,
+	    		x: window.innerWidth*0.9/4,
 	    		y: 600/4
 	    	}
 	    })
@@ -61,7 +61,7 @@ class MapSelection extends Component {
   	}
 
   	resize = () => {
-  		this.setState({width: window.innerWidth*0.833333})
+  		this.setState({width: window.innerWidth*0.9})
     	this.handleViewportChange({
       	width: '100%',
     	});
@@ -165,10 +165,10 @@ class MapSelection extends Component {
 				    />
 
 				</MapGL>
-				{area <= 1000000? 
+				{area <= 5000000? 
 					<div className='row'>
 						<div className="area-indicator">
-							<div className="area-indicator-fill" style={{width: area/1000000*200}}></div>
+							<div className="area-indicator-fill" style={{width: area/5000000*200}}></div>
 						</div>
 						<div className="area-number">Area: {area} m &#178;</div>
 					{isDemo ?
@@ -187,7 +187,7 @@ class MapSelection extends Component {
 						<div className="area-indicator">
 							<div className="area-indicator-fill area-exceed" style={{width: 200}}></div>
 						</div>
-						<div className="area-number">Area: &#62;1 km &#178;</div>
+						<div className="area-number">Area: &#62;5 km &#178;</div>
 						<div className='button button-disabled proceed-button'>Proceed to Analysis </div>
 						<div className='proceed-alert red'> Area of the selected region is too big. </div>
 					</div>

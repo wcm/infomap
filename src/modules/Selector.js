@@ -22,7 +22,7 @@ class Selector extends Component {
 	}
 
 	updateWindowDimensions = () => {
-	  this.setState({ width: window.innerWidth*0.833333 });
+	  this.setState({ width: window.innerWidth*0.9 });
 	}
 	
 	updateXY = (handlerID, e, { deltaX, deltaY }) => {

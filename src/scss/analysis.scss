@@ -1,0 +1,9 @@
+@import 'global';
+
+.noly-building{
+	transition: all .2s ease-in-out;
+	cursor: pointer;
+	&:hover{
+		fill:$primary;
+	}
+}

@@ -5,7 +5,7 @@ body {
 }
 
 .content{
-	width: 83.3333%;
+	width: 90%;
 	margin: 0 auto;
 	font-family: $fonts_global;
 }
@@ -49,4 +49,9 @@ body {
 	color: rgba(0,0,0,.64);
 	font-weight:300;
 	font-size:12;
+}
+
+.raw{
+	border-top: 1px solid $primary_f3;
+	padding: 24px 0;
 }
