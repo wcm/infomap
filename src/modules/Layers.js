@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import axios from 'axios';
 import '../scss/analysis.scss';
 
 class NolliMap extends React.Component {
@@ -19,7 +18,7 @@ class NolliMap extends React.Component {
 	    	if (relations[id].building || relations[id]["buidling:part"]){
 	    		var shapes = '';
 	    		relations[id].array.forEach((element)=>{
-	    			if (element.type == 'way' && element.value) {
+	    			if (element.type === 'way' && element.value) {
 		    			var pts = this.props.getWayPoints(element.value.array);
 		    			shapes += `M${pts}Z `;
 		    		}
@@ -130,9 +129,9 @@ class Layers extends React.Component {
 			var ways = {};
 			var relations = {};
 
-			if (this.props.rawdata){
+			if (rawdata){
 				var convert = require('xml-js');
-				var result = convert.xml2js(this.props.rawdata, {compact: true, spaces: 4});
+				var result = convert.xml2js(rawdata, {compact: true, spaces: 4});
 				console.log(result);
 
 				var osmNode = this.checkSingle(result.osm.node);
@@ -173,11 +172,11 @@ class Layers extends React.Component {
 					relations[id] = element;
 					relations[id].array = [];
 					relationMember.forEach((member) => {
-						if (member._attributes.type == 'way'){
+						if (member._attributes.type === 'way'){
 							relations[id].array.push({type: 'way', value: ways[member._attributes.ref], role: member._attributes.role});
-						}else if (member._attributes.type == 'node'){
+						}else if (member._attributes.type === 'node'){
 							relations[id].array.push({type: 'node', value: nodes[member._attributes.ref], role: member._attributes.role});
-						}else if (member._attributes.type == 'relation'){
+						}else if (member._attributes.type === 'relation'){
 							relations[id].array.push({type:'relation', value: relations[member._attributes.ref], role: member._attributes.role});
 						}
 					});

@@ -18,7 +18,6 @@ class MapSelection extends Component {
 		      	longitude: 11.5611,
 		      	zoom: 15
 	    	},	
-	    	searchResultLayer: null,
 	    	selector:{
 	    		x: 0,
 	    		y: 0
@@ -128,7 +127,7 @@ class MapSelection extends Component {
 	}
 
   	render() {
-    	const { viewport, searchResultLayer, selector, selBounds } = this.state;
+    	const { viewport, selector, selBounds } = this.state;
 	    const nlat = selBounds.n - selector.y/600*(selBounds.n-selBounds.s);
 	    const slat = selBounds.s + selector.y/600*(selBounds.n-selBounds.s);
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
