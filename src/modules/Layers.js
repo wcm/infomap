@@ -66,12 +66,16 @@ class Layers extends React.Component {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
+			loading: 0,
 			width: 1000,
 			height: 0,
 			nodes: {},
 			ways: {},
 			relations: {},
 		}
+	}
+	
+	componentDidMount() {
 	}
 
 	getDistance = (lat1, lon1, lat2, lon2) => {
@@ -118,7 +122,6 @@ class Layers extends React.Component {
 	    })
 	    return pts;
 	}
-
 
 	componentDidUpdate(prevProps) {
 		if(this.props.rawdata !== prevProps.rawdata){
@@ -187,20 +190,26 @@ class Layers extends React.Component {
 			}
 
 			this.setState({
+				loading: 100,
 				height: height,
 				nodes: nodes,
 				ways: ways,
 				relations: relations,
 			});
+
 		}
 	}
 
 	render() {
 		return(
-			<NolliMap
-				{...this.state}
-				getWayPoints = {this.getWayPoints}
-			/>
+			<div>
+				<div className={this.state.loading === 100?"hide":"loading"}>Loading Animation... {this.state.loading}</div>
+				<NolliMap
+					{...this.state}
+					getWayPoints = {this.getWayPoints}
+					addLoading = {this.addLoading}
+				/>
+			</div>
 		)
 	}
 

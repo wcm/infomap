@@ -1,0 +1,14 @@
+{
+	"Nolli Map":{
+		"title":"Coloring Mode:",
+		"options":["None", "Height", "Program"]
+	},
+	"Traffic":{
+		"title":"Display:",
+		"options":["Both", "Roads", "Public Transport"]
+	},
+	"Overlay":{
+		"title":"Options:",
+		"options":[]
+	}
+}
