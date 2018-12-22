@@ -96,7 +96,7 @@ class TrafficMap extends React.Component {
 	    		cat = this.getWayCat(ways[id].tag.highway);
 	    		style = styles[cat];
 		    	content[5-cat].push(
-			    	<path d={`M ${pts}`} fill="none" stroke={style.color} strokeWidth={style.strokeWidth} strokeLinecap="round" strokeLinejoin="round" key={id+"w"} onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    	<path d={`M ${pts}`} fill="none" stroke={style.color} strokeWidth={style.strokeWidth} strokeLinecap="round" strokeLinejoin="round" key={id+"w"} onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 					    <title>{id}</title>
 					</path>
 		    	)
@@ -109,7 +109,7 @@ class TrafficMap extends React.Component {
 	    			if (element.type === 'way' && element.value) {
 		    			var pts = element.value.map(e => e.join(',')).join(' ');
 				    	content.push(
-				    		<path d={`M ${pts}`} fill="none" stroke="red" strokeWidth="1" key={index.toString()+id} onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+				    		<path d={`M ${pts}`} fill="none" stroke="red" strokeWidth="1" key={index.toString()+id} onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 				    			<title>{id}</title>
 				    		</path>
 				    	)
@@ -118,10 +118,10 @@ class TrafficMap extends React.Component {
 		    			if (relations[id].tag.route === "subway" || relations[id].tag.route === "train"){radius = 40}
 				    	content.push(
 				    		<g key={index.toString()+id}>
-			    				<circle cx={element.value[0]} cy={element.value[1]} r={radius} fill="rgba(255,90,90,.2)" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    				<circle cx={element.value[0]} cy={element.value[1]} r={radius} fill="rgba(255,90,90,.2)" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 					    			<title>{id}</title>
 					    		</circle> 
-			    				<circle cx={element.value[0]} cy={element.value[1]} r="2" fill="#803535" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    				<circle cx={element.value[0]} cy={element.value[1]} r="2" fill="#803535" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 					    			<title>{id}</title>
 					    		</circle> 
 				    		</g>
@@ -139,7 +139,7 @@ class TrafficMap extends React.Component {
 	    		cat = this.getWayCat(relations[id].tag.highway);
 	    		style = styles[cat];
 		    	content[5-cat].push(
-		    		<path d={shapes} fillRule="evenodd" fill={style.color} stroke="none" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+		    		<path d={shapes} fillRule="evenodd" fill={style.color} stroke="none" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 		    			<title>{id}</title>
 		    		</path>
 		    	)
@@ -151,7 +151,7 @@ class TrafficMap extends React.Component {
 {/*	    for (id in nodes) {
 	    	if (nodes[id].tag.highway){
 				content.push(
-					<circle cx={nodes[id].x} cy={nodes[id].y} r="3" fill="red" stroke="white" strokeWidth=".5" key={id} onMouseOver={this.showTooltip.bind(this, nodes[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+					<circle cx={nodes[id].x} cy={nodes[id].y} r="3" fill="red" stroke="white" strokeWidth=".5" key={id} onMouseEnter={this.showTooltip.bind(this, nodes[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 				)
 			}
 	    }; */}
@@ -184,7 +184,7 @@ class TrafficMap extends React.Component {
 					{content}
 				</svg>
 				<div className={this.state.tooltip? "tooltip":"hide"} style={tooltipstyle}>
-					<div className="tooltip-title">Building Details</div>
+					<div className="tooltip-title">Route Details</div>
 					{text}
 				</div>
 			</div>

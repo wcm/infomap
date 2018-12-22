@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import '../scss/analysis.scss';
 import NolliMap from "./NolliMap"
 import TrafficMap from "./TrafficMap"
-
+import VisibilityMap from "./VisibilityMap2"
 class D3Layers extends React.Component {
 	constructor(props: Props) {
 		super(props);
@@ -14,9 +14,13 @@ class D3Layers extends React.Component {
 			nodes: {},
 			ways: {},
 			relations: {},
+			humans: [[500,250]],
+			arcs:[0],
+			regions:[""],
 			options : {
 			"Nolli Map": "None",
 			"Traffic": "Both",
+			"Visibility": "Both",
 			},
 		}
 	}
@@ -193,12 +197,16 @@ class D3Layers extends React.Component {
 				})
 				this.addLoading(100);
 			}
+	
+			this.pixratio = this.container.offsetWidth/1000;
+			this.ratio = ratio;
 
 			this.setState({
 				height: height,
 				nodes: nodes,
 				ways: ways,
 				relations: relations,
+				humans: [[Math.random() * width,Math.random() * height]],
 			});
 
 
@@ -221,11 +229,28 @@ class D3Layers extends React.Component {
 			)
 			data.options.forEach((option) => {
 				content.push(
-					<div className={option === selectedOption? "options-item-selected" : "options-item"} onClick={()=>{this.setOption(option)}} key={option}>
+					<div className={option === selectedOption? "options-item selected" : "options-item"} onClick={()=>{this.setOption(option)}} key={option}>
 						{option}
 					</div>
 				)
 			})
+		}
+		if (this.props.selected === "Visibility"){
+			content.push(
+				<div className="options-title" key="title">
+					You can add up to 5 viewing points:
+				</div>
+			)
+			content.push(
+				<button className="options-button" onClick={this.addHuman} key="add" disabled={this.state.arcs.length >= 5}>
+					Add a Point
+				</button>
+			)
+			content.push(
+				<button className="options-button" onClick={this.deleteHuman} key="delete" disabled={this.state.arcs.length <= 1}>
+					Delete a Point
+				</button>
+			)
 		}
 		return content;
 	}
@@ -237,8 +262,61 @@ class D3Layers extends React.Component {
 		console.log("reset!");
 	}
 
+	setPos = (num, position) => {
+		var newhumans = this.state.humans;
+		newhumans[num] = position
+		this.setState({humans: newhumans});
+	}
+
+	setArc = (num, value) => {
+		var newarcs = this.state.arcs;
+		newarcs[num] = value
+		this.setState({arc: newarcs});
+	}
+
+	setRegion = (num, value) => {
+		var newregions = this.state.regions
+		newregions[num] = value
+		this.setState({regions: newregions});
+	}
+
+	setArcs = (value) => {
+		this.setState({arc: value});
+	}
+
+	setRegions = (value) => {
+		this.setState({regions: value});
+	}
+
+	addHuman = () => {
+		var newhumans = this.state.humans;
+		var newarcs = this.state.arcs;
+		var newregions = this.state.regions;
+		newhumans.push([Math.random() * this.state.width, Math.random() * this.state.height]);
+		newarcs.push(0);
+		newregions.push("");
+		this.setState({
+			humans: newhumans,
+			arcs: newarcs,
+			regions: newregions,
+		});
+	}
+
+	deleteHuman = () => {
+		var newhumans = this.state.humans;
+		var newarcs = this.state.arcs;
+		var newregions = this.state.regions;
+		newhumans.pop();
+		newarcs.pop();
+		newregions.pop();
+		this.setState({
+			humans: newhumans,
+			arcs: newarcs,
+			regions: newregions,
+		});
+	}
+
 	render() {
-		console.log(this.state.options);
 		var optionbar = this.getOptions();
 		var {ways, nodes, relations, width, height} = this.state;
 		var maps = {};
@@ -278,13 +356,40 @@ class D3Layers extends React.Component {
 				option = {this.state.options["Traffic"]}
 			/>;
 
+		maps["Visibility"] = 
+			<VisibilityMap
+				nodes = {nodes}
+				ways = {ways}
+				relations = {relations}
+				width = {width}
+				height = {height}
+				humans = {this.state.humans}
+				arcs = {this.state.arcs}
+				regions = {this.state.regions}
+				setPos = {this.setPos}
+				setArc = {this.setArc}
+				setRegion = {this.setRegion}
+				setArcs = {this.setArcs}
+				setRegions = {this.setRegions}
+				addLoading = {this.addLoading}
+				nlat = {this.props.nlat}
+				slat = {this.props.slat}
+				wlng = {this.props.wlng}
+				elng = {this.props.elng}
+				key = "Visibility"
+				option = {this.state.options["Traffic"]}
+				ratio = {this.pixratio}
+				lengthratio = {this.ratio}
+			/>;
+
 		for (var key in this.props.added){
 			if (this.props.added[key]){
 				ovl.unshift(maps[key]);
 			}
 		}
+
 		return(
-			<div className="maps-wrapper">
+			<div className="maps-wrapper" ref={el => (this.container = el)}>
 				<div className="options">
 					{optionbar}
 				</div>

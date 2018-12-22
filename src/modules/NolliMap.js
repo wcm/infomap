@@ -80,6 +80,9 @@ class NolliMap extends React.Component {
 			},
 			{
 				fill: "rgba(60, 60, 60)",
+			},
+			{
+				fill: "rgba(52, 168, 0, .4)"
 			}
 		];
 
@@ -106,13 +109,13 @@ class NolliMap extends React.Component {
 	    			if (levels){
 		    			color = `rgba(0,0,255,${levels/10})`;
 			    		content.push(
-			    			<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    			<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 			    				<title>{id}</title>
 			    			</path>
 			    		);
 		    		}else{
 			    		content.unshift(
-			    			<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    			<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 			    				<title>{id}</title>
 			    			</path>
 			    		);
@@ -120,13 +123,13 @@ class NolliMap extends React.Component {
 		    	}else if (this.props.option === "Program"){
 		    		cat = this.getBuildingCat(relations[id].tag.building);
 			    	content.push(
-			    		<path d={shapes} fillRule="evenodd" fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    		<path d={shapes} fillRule="evenodd" fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 			    			<title>{id}</title>
 			    		</path>
 			    	);
 		    	}else if (this.props.option === "None"){
 			    	content.push(
-			    		<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    		<path d={shapes} fillRule="evenodd" fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 			    			<title>{id}</title>
 			    		</path>
 			    	);
@@ -141,7 +144,7 @@ class NolliMap extends React.Component {
 		    		}
 	    		})
 		    	content.push(
-		    		<path d={shapes} fillRule="evenodd" fill={styles[4].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+		    		<path d={shapes} fillRule="evenodd" fill={styles[6].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 		    			<title>{id}</title>
 		    		</path>
 		    	);
@@ -161,29 +164,29 @@ class NolliMap extends React.Component {
 	    			if (levels) {
 		    			color = `rgba(0,0,255,${levels/10})`;
 			    		content.push(
-			    			<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+			    			<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    		)
 		    		}else{
 			    		content.unshift(
-			    			<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+			    			<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    		)	    			
 		    		}
 		    	}else if (this.props.option === "Program"){
 					cat = this.getBuildingCat(ways[id].tag.building);
 		    		content.push(
-			    		<polygon points={pts} fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+			    		<polygon points={pts} fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    	)
 
 		    	}else if (this.props.option === "None"){
 			    	content.push(
-			    		<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+			    		<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    	)
 		    	}
 
 			}else if ((ways[id].tag.leisure || ways[id].tag.landuse === "grass") && this.props.option === "Program"){
 				var pts = ways[id].points.map(e => e.join(',')).join(' ');
 		    	content.push(
-		    		<polygon points={pts} fill={styles[4].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseOver={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
+		    		<polygon points={pts} fill={styles[6].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 		    	)
 			}
 	    };
@@ -219,7 +222,6 @@ class NolliMap extends React.Component {
 				right: "0"
 			}
 		}
-		console.log("rerender!");
 		return(
 			<div className="nollimap">
 				<svg version="1.1" viewBox={`0 0 ${width} ${height}`} style = {{width: this.state.width}}>

@@ -24,6 +24,7 @@
     "react-map-gl": "^4.0.2",
     "react-map-gl-geocoder": "^1.5.5",
     "react-router-dom": "^4.3.1",
+    "svg-intersections": "^0.4.0",
     "xml-js": "^1.6.8"
   },
   "devDependencies": {

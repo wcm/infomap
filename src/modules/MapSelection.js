@@ -133,7 +133,6 @@ class MapSelection extends Component {
 	    const wlng = selBounds.w + selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const elng = selBounds.e - selector.x/this.state.width*(selBounds.e-selBounds.w);
 	    const area = this.getBoundArea(nlat, slat, wlng, elng).toFixed(2);
-	    const isDemo = (this.props.location.pathname === `${process.env.PUBLIC_URL}/demo`);
 	    return (
 	    	<div>
 				<MapGL
@@ -164,21 +163,15 @@ class MapSelection extends Component {
 				    />
 
 				</MapGL>
-				{area <= 5000000? 
+				{area <= 4000000? 
 					<div className='row'>
 						<div className="area-indicator">
-							<div className="area-indicator-fill" style={{width: area/5000000*200}}></div>
+							<div className="area-indicator-fill" style={{width: area/4000000*200}}></div>
 						</div>
 						<div className="area-number">Area: {area} m &#178;</div>
-					{isDemo ?
-					    <Link to={`${process.env.PUBLIC_URL}/demo/selected`}> 
-							<div className='button proceed-button'>Proceed to Analysis </div>
-				    	</Link>
-					:
 					    <Link to={`${process.env.PUBLIC_URL}/selected/${wlng}/${slat}/${elng}/${nlat}`}> 
 							<div className='button proceed-button'>Proceed to Analysis </div>
 				    	</Link>
-				    }
 						<div className='proceed-alert green'> You can use this selected region. </div>
 				    </div>
 			    :
@@ -192,9 +185,6 @@ class MapSelection extends Component {
 					</div>
 		    	}
 			    <div className='clearfix'/>
-			    {isDemo?
-			    	<div/>
-			    :
 				<div className='raw'>
 				    <div>
 				    	<p>Viewport Coordinates:</p>

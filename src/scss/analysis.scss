@@ -33,8 +33,13 @@
 			padding: 0 12px;
 			border: 1px solid $primary;
 			border-radius: 4px;
+		    &.selected{
+				background-color: $primary;
+				color: white;
+			}
 		}
-		.options-item-selected{
+		.options-button{
+			color:$primary;
 			line-height: 26px;
 			font-size: 16px;
 			cursor: pointer;
@@ -43,8 +48,15 @@
 			padding: 0 12px;
 			border: 1px solid $primary;
 			border-radius: 4px;
-			background-color: $primary;
-			color: white;
+			&:active{
+				background-color: $primary;
+				color: white;				
+			}
+			&:disabled{
+				cursor: not-allowed;
+				border: 1px solid grey;
+				color: grey;
+			}
 		}
 	}
 
@@ -63,10 +75,21 @@
 	}
 
 	.trafficmap{
+		width:100%;
 		position:absolute;
 		top:50px;
 		left:0;		
 	}
+
+	.visibilitymap{
+		position:absolute;
+		width:100%;
+		top:50px;
+		left:0;		
+		.status{
+		}
+	}
+
 
 	.tooltip{
 		display:inline-block;
@@ -89,6 +112,23 @@
 				font-weight: 300;
 				margin-right: 20px;
 			}
+		}
+	}
+
+	.human{
+		position:absolute;
+		height: 30px;
+		width: 30px;
+		border-radius: 15px;
+		cursor: move;
+		background-color: rgba(0,0,0,.2);
+		.dot{
+			display:inline-block;
+			margin: 6px;
+			height: 8px;
+			width: 8px;
+			background-color: red;
+			border-radius: 50%;
 		}
 	}
 

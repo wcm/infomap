@@ -21,9 +21,7 @@ ReactDOM.render((
 			<Route exact path = {process.env.PUBLIC_URL + '/'} component = {SelectArea} />
 			<Route exact path = {process.env.PUBLIC_URL + '/help'} component = {Help} />
 			<Route exact path = {process.env.PUBLIC_URL + '/about'} component = {About} />
-			<Route exact path = {process.env.PUBLIC_URL + '/demo'} component = {SelectArea} />
 			<Route exact path = {process.env.PUBLIC_URL + '/selected/:wlng/:slat/:elng/:nlat'} component = {Maps}/>
-			<Route exact path = {process.env.PUBLIC_URL + '/demo/selected'} component = {MapsDemo}/>
 			<Footer/>
 		</div>
 	</ScrollToTop>

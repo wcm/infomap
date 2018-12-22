@@ -10,9 +10,10 @@ class Maps extends React.Component {
 		super(props);
 		this.state = {
 			raw: null,
-			layers:["Nolli Map", "Traffic"],
+			layers:[ "Nolli Map", "Visibility", "Traffic"],
 			added:{
 				"Nolli Map": true,
+				"Visibility": false,
 				"Traffic": true,
 			},
 			selected:"Nolli Map",
