@@ -42,6 +42,8 @@ class VisibilityMap extends React.Component {
 			}
 	    };
 
+	    buildings += `M 0,0 0,${this.props.height} ${this.props.width},${this.props.height} ${this.props.width},0 Z`
+
 	    this.buildings = buildings;
 	    for (var key in this.props.regions){
 	    	if(this.props.regions[key] === ""){this.props.setRegion(key, `M${this.props.humans[key][0]/this.props.ratio},${this.props.humans[key][1]/this.props.ratio} `)};
@@ -57,28 +59,35 @@ class VisibilityMap extends React.Component {
 
 
     componentDidMount() {
-        this.interval = setInterval(() => this.updateRegions(), 50);
+        this.interval = setInterval(() => this.updateRegions(), 5);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
 
-	handleStart = (key, e, { deltaX, deltaY }) => {
-		this.props.setPos(key, [this.props.humans[key][0] + deltaX, this.props.humans[key][1] + deltaY]);
-	    this.props.setRegion(key, `M${this.props.humans[key][0]/this.props.ratio},${this.props.humans[key][1]/this.props.ratio} `);
-	    this.props.setArc(key, 0)
-	}
+    updatePos = (key, e, { deltaX, deltaY }) => {
+		var newX = (this.props.humans[key][0] + deltaX)/this.props.ratio;
+		var newY = (this.props.humans[key][1] + deltaY)/this.props.ratio;
+		if (newX > 5 && newX < (this.props.width-5) && newY > 5 && newY < (this.props.height-5)){
+			this.props.setPos(key, [this.props.humans[key][0] + deltaX, this.props.humans[key][1] + deltaY]);
+		}
 
-	handleStop = (key, e, { deltaX, deltaY }) => {
-		this.props.setPos(key, [this.props.humans[key][0] + deltaX, this.props.humans[key][1] + deltaY]);
-	    this.props.setRegion(key, `M${this.props.humans[key][0]/this.props.ratio},${this.props.humans[key][1]/this.props.ratio} `);
-	    this.props.setArc(key, 0)
+    }
+
+	handleStart = (key, e, { deltaX, deltaY }) => {
+		this.updatePos(key, e, { deltaX, deltaY });
+	    this.props.setRegion(key, '');
+	    this.props.setArc(key, -1)
 	}
 
 	handleDrag = (key, e, { deltaX, deltaY }) => {
-		this.props.setPos(key, [this.props.humans[key][0] + deltaX, this.props.humans[key][1] + deltaY]);
-	    this.props.setRegion(key, `M${this.props.humans[key][0]/this.props.ratio},${this.props.humans[key][1]/this.props.ratio} `);
+		this.updatePos(key, e, { deltaX, deltaY })
+	}
+
+	handleStop = (key, e, { deltaX, deltaY }) => {
+		this.updatePos(key, e, { deltaX, deltaY })	    
+		this.props.setRegion(key, `M${this.props.humans[key][0]/this.props.ratio},${this.props.humans[key][1]/this.props.ratio} `);
 	    this.props.setArc(key, 0)
 	}
 
@@ -100,7 +109,7 @@ class VisibilityMap extends React.Component {
 			var area = getArea(pts) / this.props.lengthratio / this.props.lengthratio;
 			this.setState({
 				tooltip: true,
-				info: `Visible Area: ${area.toFixed(2)}`,
+				info: `Visible Area: ${area.toFixed(2)} m` + decodeURI("m%C2%B2"),
 				shaded: region,
 			})
 		}else{			this.setState({
@@ -129,7 +138,7 @@ class VisibilityMap extends React.Component {
 		var arcs = this.props.arcs;
 		var changed = false;
 		for (var key in arcs){
-			if (arcs[key]<360){
+			if (arcs[key]<360 && arcs[key] != -1){
 				changed = true;
 				var arc = arcs[key];
 				var region = regions[key];
@@ -149,12 +158,10 @@ class VisibilityMap extends React.Component {
 						svgShape("path", {d:this.buildings})  
 					);
 
-					var close = width * width + height * height;
 					//var closePt = {x: x + radius * Math.sin(toRad(arc)), y: y + radius * Math.cos(toRad(arc))};
-					var closePt = intersect(  
-						svgShape("line", { x1: x + radius * Math.sin(toRad(arc)), y1: y + radius * Math.cos(toRad(arc)), x2: x, y2: y }),
-						svgShape("rect", {x:0, y:0, width:this.props.width, height:this.props.height})  
-					).points[0];
+					var closePt = intersections.points[0];
+					var close = distSq(0, 0, width, height);
+					if (closePt){close = distSq(x, y, closePt.x, closePt.y)}
 
 					intersections.points.forEach((point) => {
 						if (distSq(x, y, point.x, point.y) < close){
@@ -179,14 +186,14 @@ class VisibilityMap extends React.Component {
 		var regions = this.props.regions.map((region, index) => <path d={region} fill={colors[0]} stroke="red" strokeWidth="1" key={index} onMouseEnter={this.showTooltip.bind(this, region, index)} onMouseLeave={this.hideTooltip.bind(this)}/>);
 		var humans = this.props.humans.map((human, index) => <circle cx={human[0]/this.ratio} cy={human[1]/this.ratio} r="3" fill = "red" key={index}/>)
 		var handles = this.props.humans.map((human, index) => 				
-				<DraggableCore
-			        onStart={this.handleStart.bind(this, index)}
-			        onDrag={this.handleDrag.bind(this, index)}
-			        onStop={this.handleStop.bind(this, index)}
-			        key={index}>
-		        	<div className="human" style={{top:human[1]-15, left:human[0]-15}}>
-		        	</div>
-		      	</DraggableCore>
+			<DraggableCore
+			    onStart={this.handleStart.bind(this, index)}
+			    onDrag={this.handleDrag.bind(this, index)}
+			    onStop={this.handleStop.bind(this, index)}
+			    key={index}>
+		    	<div className="human" style={{top:human[1]-15, left:human[0]-15}}>
+		    	</div>
+		    </DraggableCore>
 		)
 
 		var tooltipstyle = {};
@@ -207,8 +214,10 @@ class VisibilityMap extends React.Component {
 			<div className="visibilitymap">
 				<svg version="1.1" viewBox={`0 0 ${this.props.width} ${this.props.height}`} ref={el => (this.container = el)}>
 					<path d={this.state.shaded} fill="#f15c22" stroke="none"/>
-					<path d={this.buildings} fill="rgba(0, 0, 0, .1)" stroke="rgba(60, 60, 60)" strokeWidth=".5"/>
+					<path d={this.buildings} fillRule="evenodd" fill="rgba(0, 0, 0, .05)" stroke="rgba(60, 60, 60)" strokeWidth=".5"/>
+					<g>
 					{regions}
+					</g>
 					{humans}
 				</svg>
 				{handles}

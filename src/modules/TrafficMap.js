@@ -57,28 +57,29 @@ class TrafficMap extends React.Component {
 	render() {
 		let content = [[], [], [], [], [], []];
 		var {width, height, nodes, ways, relations} = this.props;
+		var ratio = this.props.lengthratio;
 		var info = this.state.info;
 
 		const styles = [
 			{
 				color: "#b5451a",
-				strokeWidth: "8"
+				strokeWidth: "16"
 			},
 			{
 				color: "#f15c22",
-				strokeWidth: "6"
+				strokeWidth: "10"
 			},
 			{
 				color: "#f47d4e",
-				strokeWidth: "6"
+				strokeWidth: "10"
 			},
 			{
 				color: "#f79d7a",
-				strokeWidth: "4"
+				strokeWidth: "5"
 			},
 			{
 				color: "#f9bea7",
-				strokeWidth: "3"
+				strokeWidth: "2"
 			},
 			{
 				color: "#fcded3",
@@ -96,7 +97,7 @@ class TrafficMap extends React.Component {
 	    		cat = this.getWayCat(ways[id].tag.highway);
 	    		style = styles[cat];
 		    	content[5-cat].push(
-			    	<path d={`M ${pts}`} fill="none" stroke={style.color} strokeWidth={style.strokeWidth} strokeLinecap="round" strokeLinejoin="round" key={id+"w"} onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    	<path d={`M ${pts}`} fill="none" stroke={style.color} strokeWidth={style.strokeWidth * ratio} strokeLinecap="round" strokeLinejoin="round" key={id+"w"} onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 					    <title>{id}</title>
 					</path>
 		    	)
@@ -108,17 +109,26 @@ class TrafficMap extends React.Component {
 	    		relations[id].members.forEach((element, index)=>{
 	    			if (element.type === 'way' && element.value) {
 		    			var pts = element.value.map(e => e.join(',')).join(' ');
-				    	content.push(
-				    		<path d={`M ${pts}`} fill="none" stroke="red" strokeWidth="1" key={index.toString()+id} onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
-				    			<title>{id}</title>
-				    		</path>
-				    	)
+		    			if (element.role === 'platform'){
+					    	content.push(
+					    		<path d={`M ${pts}`} fill="red" stroke="red" strokeWidth="1" key={index.toString()+id} onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+					    			<title>{id}</title>
+					    		</path>
+					    	)
+
+		    			}else{
+					    	content.push(
+					    		<path d={`M ${pts}`} fill="none" stroke="red" strokeWidth="1" key={index.toString()+id} onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+					    			<title>{id}</title>
+					    		</path>
+					    	)
+					    }
 		    		}else if(element.type === 'node' && element.value){
-		    			var radius = 20;
-		    			if (relations[id].tag.route === "subway" || relations[id].tag.route === "train"){radius = 40}
+		    			var radius = 50;
+		    			if (relations[id].tag.route === "subway" || relations[id].tag.route === "train"){radius = 100}
 				    	content.push(
 				    		<g key={index.toString()+id}>
-			    				<circle cx={element.value[0]} cy={element.value[1]} r={radius} fill="rgba(255,90,90,.2)" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
+			    				<circle cx={element.value[0]} cy={element.value[1]} r={radius*ratio} fill="rgba(255,90,90,.1)" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 					    			<title>{id}</title>
 					    		</circle> 
 			    				<circle cx={element.value[0]} cy={element.value[1]} r="2" fill="#803535" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>

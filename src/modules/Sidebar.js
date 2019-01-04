@@ -63,10 +63,10 @@ class Sidebar extends React.Component {
 
   render() {
 	var content = this.renderMenu();
-
+	console.log(this.props.longitude);
     return (
       <div className="menu">
-		<Link to={`${process.env.PUBLIC_URL}/`} className="back">
+		<Link to={`${process.env.PUBLIC_URL}/${this.props.longitude}/${this.props.latitude}`} className="back">
 			<svg version="1.1" viewBox="0 0 80 80" className="back-icon">
 				<path id="XMLID_7_" d="M74,35H18.1l23.5-23.5c2-2,2-5.1,0-7.1c-2-2-5.1-2-7.1,0l-32,32c0,0,0,0,0,0C2.2,36.7,2,37,1.8,37.2
 				c-0.1,0.1-0.1,0.3-0.2,0.4c-0.1,0.2-0.2,0.3-0.2,0.5c-0.1,0.2-0.1,0.3-0.2,0.5c0,0.1-0.1,0.3-0.1,0.4c-0.1,0.6-0.1,1.3,0,2

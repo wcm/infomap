@@ -134,20 +134,6 @@ class NolliMap extends React.Component {
 			    		</path>
 			    	);
 		    	}
-
-			}else if ((relations[id].tag.leisure || relations[id].tag.landuse === "grass") && this.props.option === "Program"){
-	    		var shapes = '';
-	    		relations[id].members.forEach((element)=>{
-	    			if (element.type === 'way' && element.value) {
-		    			var pts = element.value.map(e => e.join(',')).join(' ');
-		    			shapes += `M ${pts}`;
-		    		}
-	    		})
-		    	content.push(
-		    		<path d={shapes} fillRule="evenodd" fill={styles[6].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
-		    			<title>{id}</title>
-		    		</path>
-		    	);
 			}
 
 	    };
@@ -182,12 +168,6 @@ class NolliMap extends React.Component {
 			    		<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    	)
 		    	}
-
-			}else if ((ways[id].tag.leisure || ways[id].tag.landuse === "grass") && this.props.option === "Program"){
-				var pts = ways[id].points.map(e => e.join(',')).join(' ');
-		    	content.push(
-		    		<polygon points={pts} fill={styles[6].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
-		    	)
 			}
 	    };
 

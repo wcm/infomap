@@ -14,7 +14,7 @@ class Footer extends React.Component {
 	render() {
 		return (
 			<div className="footer">
-				<div>Infomap v0.1.0 prototype &copy; 2018 Wu Chenmu</div>
+				<div>Infomap v0.1.0 beta &copy; 2018 Wu Chenmu</div>
 		    </div>
 		);
 	}

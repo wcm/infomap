@@ -1,4 +1,8 @@
 {
+	"POI Map":{
+		"title":"Display:",
+		"options":["None", "Short Links", "Long Links"]
+	},
 	"Nolli Map":{
 		"title":"Coloring Mode:",
 		"options":["None", "Height", "Program"]

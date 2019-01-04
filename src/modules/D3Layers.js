@@ -1,9 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import '../scss/analysis.scss';
-import NolliMap from "./NolliMap"
-import TrafficMap from "./TrafficMap"
-import VisibilityMap from "./VisibilityMap2"
+import NolliMap from "./NolliMap";
+import TrafficMap from "./TrafficMap";
+import VisibilityMap from "./VisibilityMap2";
+import POIMap from "./POIMap";
+import NaturalElements from "./NaturalElements";
+import {distSq} from "./helpers";
+
 class D3Layers extends React.Component {
 	constructor(props: Props) {
 		super(props);
@@ -18,9 +22,11 @@ class D3Layers extends React.Component {
 			arcs:[0],
 			regions:[""],
 			options : {
+			"POI Map": "Short Links",
 			"Nolli Map": "None",
-			"Traffic": "Both",
 			"Visibility": "Both",
+			"Traffic": "Both",
+			"Natural Elements": "",
 			},
 		}
 	}
@@ -165,11 +171,9 @@ class D3Layers extends React.Component {
 					var relationTag = this.checkSingle(element.tag);
 
 					relations[id] = {element: element};
-					relations[id].children = [];
 					relations[id].members = []
 					relations[id].tag = {};
 					relationMember.forEach((member) => {
-						relations[id].children.push(ways[member._attributes.ref]);
 						if (member._attributes.type === 'way' && ways[member._attributes.ref]){
 							relations[id].members.push({type: 'way', value: ways[member._attributes.ref].points, role: member._attributes.role});
 						}else if (member._attributes.type === 'node' && nodes[member._attributes.ref]){
@@ -197,16 +201,60 @@ class D3Layers extends React.Component {
 				})
 				this.addLoading(100);
 			}
+
+			var selected = [];
+			var shortLinks = [];
+			var longLinks = []
+			var except = ["waste_basket", "waste_disposal", "waste_transfer_station", "recycling"]
+
+	    	for (var id in nodes) {
+	    		if (nodes[id].tag["amenity"] != null && except.indexOf(nodes[id].tag["amenity"]) === -1){
+	    			nodes[id].longLink = 0;
+	    			nodes[id].shortLink = 0;
+					selected.push(nodes[id]);
+				}
+	    	};
+
+	    	for (var i=0; i<selected.length; i++) {
+	    		for (var j = i+1; j<selected.length; j++){
+	    			var linkLengh = Math.sqrt(distSq(selected[i].x, selected[i].y, selected[j].x, selected[j].y))/ratio;
+					if( linkLengh <= 150){
+						selected[i].longLink ++;
+						selected[j].longLink ++;
+						longLinks.push({
+							x1:selected[i].x, 
+							y1:selected[i].y, 
+							x2:selected[j].x, 
+							y2:selected[j].y
+						});
+
+						if(linkLengh <= 100){
+							selected[i].shortLink ++;
+							selected[j].shortLink ++;
+							shortLinks.push({
+								x1:selected[i].x, 
+								y1:selected[i].y, 
+								x2:selected[j].x, 
+								y2:selected[j].y
+							})
+						}
+					}
+	    		}
+	    	}
+
 	
-			this.pixratio = this.container.offsetWidth/1000;
+			this.pixratio = this.container.offsetWidth/width;
 			this.ratio = ratio;
+			this.selected = selected;
+			this.longLinks = longLinks;
+			this.shortLinks = shortLinks;
 
 			this.setState({
 				height: height,
 				nodes: nodes,
 				ways: ways,
 				relations: relations,
-				humans: [[Math.random() * width,Math.random() * height]],
+				humans: [[Math.random() * width * this.pixratio, Math.random() * height * this.pixratio]],
 			});
 
 
@@ -259,7 +307,6 @@ class D3Layers extends React.Component {
 		var newoptions = this.state.options;
 		newoptions[this.props.selected] = option;
 		this.setState({options:newoptions});
-		console.log("reset!");
 	}
 
 	setPos = (num, position) => {
@@ -292,7 +339,7 @@ class D3Layers extends React.Component {
 		var newhumans = this.state.humans;
 		var newarcs = this.state.arcs;
 		var newregions = this.state.regions;
-		newhumans.push([Math.random() * this.state.width, Math.random() * this.state.height]);
+		newhumans.push([Math.random() * this.state.width * this.pixratio, Math.random() * this.state.height * this.pixratio]);
 		newarcs.push(0);
 		newregions.push("");
 		this.setState({
@@ -322,6 +369,27 @@ class D3Layers extends React.Component {
 		var maps = {};
 		var ovl = [];
 
+		maps["POI Map"] = 
+			<POIMap
+				nodes = {nodes}
+				ways = {ways}
+				relations = {relations}
+				width = {width}
+				height = {height}
+				getWayPoints = {this.getWayPoints}
+				addLoading = {this.addLoading}
+				nlat = {this.props.nlat}
+				slat = {this.props.slat}
+				wlng = {this.props.wlng}
+				elng = {this.props.elng}
+				option = {this.state.options["POI Map"]}
+				key = "POI Map"
+				lengthratio = {this.ratio}
+				selected = {this.selected}
+				longLinks = {this.longLinks}
+				shortLinks = {this.shortLinks}
+			/>;
+
 		maps["Nolli Map"] = 
 			<NolliMap
 				nodes = {nodes}
@@ -337,23 +405,6 @@ class D3Layers extends React.Component {
 				elng = {this.props.elng}
 				option = {this.state.options["Nolli Map"]}
 				key = "Nolli Map"
-			/>;
-
-		maps["Traffic"] = 
-			<TrafficMap
-				nodes = {nodes}
-				ways = {ways}
-				relations = {relations}
-				width = {width}
-				height = {height}
-				getWayPoints = {this.getWayPoints}
-				addLoading = {this.addLoading}
-				nlat = {this.props.nlat}
-				slat = {this.props.slat}
-				wlng = {this.props.wlng}
-				elng = {this.props.elng}
-				key = "Traffic"
-				option = {this.state.options["Traffic"]}
 			/>;
 
 		maps["Visibility"] = 
@@ -382,6 +433,41 @@ class D3Layers extends React.Component {
 				lengthratio = {this.ratio}
 			/>;
 
+		maps["Traffic"] = 
+			<TrafficMap
+				nodes = {nodes}
+				ways = {ways}
+				relations = {relations}
+				width = {width}
+				height = {height}
+				getWayPoints = {this.getWayPoints}
+				addLoading = {this.addLoading}
+				nlat = {this.props.nlat}
+				slat = {this.props.slat}
+				wlng = {this.props.wlng}
+				elng = {this.props.elng}
+				key = "Traffic"
+				option = {this.state.options["Traffic"]}
+				lengthratio = {this.ratio}
+			/>;
+
+		maps["Natural Elements"] = 
+			<NaturalElements
+				nodes = {nodes}
+				ways = {ways}
+				relations = {relations}
+				width = {width}
+				height = {height}
+				getWayPoints = {this.getWayPoints}
+				addLoading = {this.addLoading}
+				nlat = {this.props.nlat}
+				slat = {this.props.slat}
+				wlng = {this.props.wlng}
+				elng = {this.props.elng}
+				option = {this.state.options["Natural Elements"]}
+				key = "Natural Elements"
+			/>;
+
 		for (var key in this.props.added){
 			if (this.props.added[key]){
 				ovl.unshift(maps[key]);
@@ -393,7 +479,7 @@ class D3Layers extends React.Component {
 				<div className="options">
 					{optionbar}
 				</div>
-				<svg version="1.1" viewBox={`0 0 ${this.state.width} ${this.state.height}`} style = {{width: this.state.width}}/>
+				<svg version="1.1" viewBox={`0 0 ${this.state.width} ${this.state.height}`} style = {{width: "100%"}}/>
 
 				<div className={this.state.loading === 100?"hide":"loading"}>Loading... </div>
 				

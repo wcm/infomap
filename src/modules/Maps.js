@@ -10,11 +10,13 @@ class Maps extends React.Component {
 		super(props);
 		this.state = {
 			raw: null,
-			layers:[ "Nolli Map", "Visibility", "Traffic"],
+			layers:["POI Map", "Nolli Map", "Visibility", "Traffic", "Natural Elements"],
 			added:{
+				"POI Map": true,
 				"Nolli Map": true,
 				"Visibility": false,
-				"Traffic": true,
+				"Traffic": false,
+				"Natural Elements":false
 			},
 			selected:"Nolli Map",
 		}
@@ -56,6 +58,8 @@ class Maps extends React.Component {
 	}	
 	
 	render() {	
+		var longitude = (parseFloat(this.bounds.wlng) + parseFloat(this.bounds.elng))/2;
+		var latitude = (parseFloat(this.bounds.nlat) + parseFloat(this.bounds.slat))/2;
 		return (
 			<div className="maps">
 				<Sidebar
@@ -65,6 +69,8 @@ class Maps extends React.Component {
 					changeMap = {this.changeMap}
 					addOverlay = {this.addOverlay}
 					removeOverlay = {this.removeOverlay}
+					longitude = {longitude}
+					latitude = {latitude}
 				/>
 				<div className="map-display">
 					<D3Layers

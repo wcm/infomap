@@ -9,6 +9,8 @@ class Selector extends Component {
 			width: 0,
 			height: 600,
 			dragging: false,
+			mouseX: this.props.x,
+			mouseY: this.props.y
 		}
 	}
 
@@ -26,23 +28,30 @@ class Selector extends Component {
 	}
 	
 	updateXY = (handlerID, e, { deltaX, deltaY }) => {
+		var newX = this.state.mouseX;
+		var newY = this.state.mouseY;
+
 		if (handlerID === '1') {
-			if (this.props.x+deltaX >= 40 && this.props.x+deltaX <= this.state.width/2-40 && this.props.y+deltaY >= 60 && this.props.y+deltaY <= this.state.height/2-40){
-				this.props.setXY({x: this.props.x+deltaX, y: this.props.y+deltaY});
-			}
+			newX += deltaX;
+			newY += deltaY;
 		}else if (handlerID === '2') {
-			if (this.props.x-deltaX >= 40 && this.props.x-deltaX <= this.state.width/2-40 && this.props.y+deltaY >= 60 && this.props.y+deltaY <= this.state.height/2-40){
-				this.props.setXY({x: this.props.x-deltaX, y: this.props.y+deltaY});
-			}
+			newX -= deltaX;
+			newY += deltaY;
 		}else if (handlerID === '3') {
-			if (this.props.x+deltaX >= 40 && this.props.x+deltaX <= this.state.width/2-40 && this.props.y-deltaY >= 60 && this.props.y-deltaY <= this.state.height/2-40){
-				this.props.setXY({x: this.props.x+deltaX, y: this.props.y-deltaY});
-			}
+			newX += deltaX;
+			newY -= deltaY;
 		}else if (handlerID === '4') {
-			if (this.props.x-deltaX >= 40 && this.props.x-deltaX <= this.state.width/2-40 && this.props.y-deltaY >= 60 && this.props.y-deltaY <= this.state.height/2-40){
-				this.props.setXY({x: this.props.x-deltaX, y: this.props.y-deltaY});
-			}
+			newX -= deltaX;
+			newY -= deltaY;
 		}
+		if (newX >= 40 && newX <= this.state.width/2-40 && newY >= 60 && newY <= this.state.height/2-40){
+			this.props.setXY({x: newX, y: newY});
+		}
+
+		this.setState({
+			mouseX: newX,
+			mouseY: newY
+		})
 	}
 
 	handleStart = (handlerID, e, { deltaX, deltaY }) => {
@@ -53,6 +62,10 @@ class Selector extends Component {
 	handleStop = (handlerID, e, { deltaX, deltaY }) => {
 		this.props.setDragging(false);
 		this.updateXY(handlerID, e, { deltaX, deltaY });
+		this.setState({
+			mouseX: this.props.x,
+			mouseY: this.props.y
+		})
 	}
 
 	handleDrag = (handlerID, e, { deltaX, deltaY }) => {

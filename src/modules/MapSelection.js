@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import MapGL, {NavigationControl} from "react-map-gl";
+import ReactMapGL, {NavigationControl} from "react-map-gl";
 import Geocoder from "react-map-gl-geocoder";
 import {withRouter} from "react-router";
 import Selector from './Selector';
@@ -10,17 +10,29 @@ const MAPBOX_TOKEN ="pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZm
 class MapSelection extends Component {
   	constructor(props: Props) {
 	    super(props);
+	    var latitude = 48.13832;
+	    var longitude = 11.57440;
+	    if (this.props.latitude && this.props.longitude){
+	    	latitude = parseFloat(this.props.latitude);
+	    	longitude = parseFloat(this.props.longitude);
+	    }
 	    this.state = {
 	    	viewport: {
-		    	width: '100%',
-		      	height: '600px',
-		      	latitude: 48.1358,
-		      	longitude: 11.5611,
-		      	zoom: 15
-	    	},	
+		    	width: "100%",
+		      	height: 600,
+		      	longitude: longitude,
+		      	latitude: latitude,
+		      	zoom: 15,
+				bearing: 0,
+				pitch: 0,    	
+			},
+			input: {
+				"longitude": longitude.toFixed(4),
+				"latitude": latitude.toFixed(4)
+			},
 	    	selector:{
-	    		x: 0,
-	    		y: 0
+	    		x: window.innerWidth*0.9/4,
+	    		y: 600/4
 	    	},
 	    	isdragging: false,
 	    	selBounds:{
@@ -38,21 +50,8 @@ class MapSelection extends Component {
 
   	componentDidMount() {
     	window.addEventListener("resize", this.resize);
-    	this.resize();
-    	const myMap = this.mapRef.current.getMap();
-    	const bounds = myMap.getBounds();
-    	this.setState({
-	    	selBounds:{
-	    		n: bounds._ne.lat,
-	    		s: bounds._sw.lat,
-				w: bounds._sw.lng,
-	    		e: bounds._ne.lng
-	    	},
-	    	selector:{
-	    		x: window.innerWidth*0.9/4,
-	    		y: 600/4
-	    	}
-	    })
+  		this.resize();
+        this.interval = setInterval(() => this.initialLocation(), 1);
   	}
 
   	componentWillUnmount() {
@@ -61,15 +60,21 @@ class MapSelection extends Component {
 
   	resize = () => {
   		this.setState({width: window.innerWidth*0.9})
-    	this.handleViewportChange({
-      	width: '100%',
-    	});
+    	this.handleViewportChange(this.state.viewport);
   	}
 
+  	initialLocation = () =>{
+  		this.setLocation();
+  		clearInterval(this.interval);
+  	}
   	handleViewportChange = (viewport) => {
   		if (this.state.isdragging === false){
 	    	this.setState({
 	    		viewport: { ...this.state.viewport, ...viewport },
+	    		input: {
+					"longitude": viewport.longitude.toFixed(4),
+					"latitude": viewport.latitude.toFixed(4)
+				}
 	    	});
 	    	if (this.mapRef.current) {
 	    		const myMap = this.mapRef.current.getMap();
@@ -91,7 +96,6 @@ class MapSelection extends Component {
 
   	handleGeocoderViewportChange = (viewport) => {
     	const geocoderDefaultOverrides = { transitionDuration: 100 };
-		console.log(viewport);
 	    this.handleViewportChange({
 	      	...viewport,
 	      	...geocoderDefaultOverrides,
@@ -126,6 +130,23 @@ class MapSelection extends Component {
 		return this.getDistance(lat1, lon1, lat1, lon2) * this.getDistance(lat1, lon1, lat2, lon1)
 	}
 
+	setLocation = () =>{
+		var newLng = parseFloat(document.getElementById("longitude").value);
+		var newLat = parseFloat(document.getElementById("latitude").value);
+    	this.handleViewportChange({
+    		longitude:newLng,
+    		latitude:newLat
+    	});		
+	}
+
+	changeInputValue = (field, e) => {
+		var newInput = this.state.input;
+		newInput[field] = e.target.value;
+		this.setState({
+			input:newInput
+		})
+	}
+
   	render() {
     	const { viewport, selector, selBounds } = this.state;
 	    const nlat = selBounds.n - selector.y/600*(selBounds.n-selBounds.s);
@@ -135,7 +156,7 @@ class MapSelection extends Component {
 	    const area = this.getBoundArea(nlat, slat, wlng, elng).toFixed(2);
 	    return (
 	    	<div>
-				<MapGL
+				<ReactMapGL
 					className='map'
 				    ref={this.mapRef}
 				    {...viewport}
@@ -162,7 +183,7 @@ class MapSelection extends Component {
 				    	setXY = {this.setXY}
 				    />
 
-				</MapGL>
+				</ReactMapGL>
 				{area <= 4000000? 
 					<div className='row'>
 						<div className="area-indicator">
@@ -179,12 +200,19 @@ class MapSelection extends Component {
 						<div className="area-indicator">
 							<div className="area-indicator-fill area-exceed" style={{width: 200}}></div>
 						</div>
-						<div className="area-number">Area: &#62;5 km &#178;</div>
+						<div className="area-number">Area: &#62;4 km &#178;</div>
 						<div className='button button-disabled proceed-button'>Proceed to Analysis </div>
 						<div className='proceed-alert red'> Area of the selected region is too big. </div>
 					</div>
 		    	}
 			    <div className='clearfix'/>
+			    <div>
+				    longitude:
+				    <input type="number" id="longitude" step="0.0001" min="-180" max="180" value={this.state.input["longitude"]} onChange={(e)=>this.changeInputValue("longitude", e)}/>
+				    latitude:
+				    <input type="number" id="latitude" step="0.0001" min="-90" max="90" value={this.state.input["latitude"]} onChange={(e)=>this.changeInputValue("latitude", e)}/>
+				    <div className="button" onClick={this.setLocation}>Go</div>
+			    </div>
 				<div className='raw'>
 				    <div>
 				    	<p>Viewport Coordinates:</p>
@@ -199,7 +227,6 @@ class MapSelection extends Component {
 			    		<p> {area}</p>
 			    	</div>
 		    	</div>
-		    	}
 		    </div>
 	    );
   	}
