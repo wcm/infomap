@@ -3,11 +3,12 @@
 body {
 	margin: 0;
 }
-
 .content{
-	width: 90%;
+	width: 100%;
+	height: 100%;
 	margin: 0 auto;
 	font-family: $fonts_global;
+	position: absolute;
 }
 
 .title{
@@ -21,20 +22,49 @@ body {
 
 .button{
 	display:inline-block;
-	height: 50px;
-	line-height: 50px;
+	height: 36px;
+	width: 100%;
+	border-radius: 18px;
+	line-height: 36px;
 	background-color: $primary;
-	padding: 0 20px;
 	color: white;
 	font-family: $fonts_title;
-	font-size: 24px;
+	font-size: 16px;
+	font-weight: 500;
 	text-decoration: none;
 	transition: all .15s ease-in-out;
 	cursor: pointer;
+	text-align: center;
+	margin-top: 12px;
 	&:hover{
-		background-color: $primary_f1;
+		background-color: $primary80;
 	}	
 	&.button-disabled{
+		cursor: not-allowed;
+		background-color: rgba(0,0,0,.4);		
+	}
+}
+.button-secondary{
+	display:inline-block;
+	height: 36px;
+	width: 100%;
+	border-radius: 18px;
+	line-height: 36px;
+	background-color: $primary_f3;
+	color: $primary;
+	font-family: $fonts_title;
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: all .15s ease-in-out;
+	cursor: pointer;
+	text-align: center;
+	margin-top: 12px;
+	&:hover{
+		background-color: $primary_f2;
+	}	
+	&.button-disabled{
+		cursor: not-allowed;
 		background-color: rgba(0,0,0,.4);		
 	}
 }
@@ -43,14 +73,25 @@ body {
 	clear:both;
 }
 
-.footer{
-	width: 100%;
-	border-top: 1px solid $primary_f3;
-	padding: 24px 0;
-	color: rgba(0,0,0,.64);
-	font-weight:300;
-	font-size:12;
+.footer-wrapper{
+	min-height:100%;
+	margin-bottom: -40px;
 }
+
+.push {
+  	height: 40px;
+}
+.sidebar-footer{
+	width: 250px;
+	.footer-tab{
+		cursor:pointer;
+		float:left;
+		color:$primary;
+		font-size: 14px;
+		margin: 12px 0 12px 20px;
+	}
+}
+
 
 .hide{
 	display:none;
@@ -59,4 +100,8 @@ body {
 .raw{
 	border-top: 1px solid $primary_f3;
 	padding: 24px 0;
+}
+
+a{
+	text-decoration: none;
 }

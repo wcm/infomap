@@ -1,93 +1,107 @@
 @import 'global';
 
 .menu{
-	float:left;
-	font-family: $fonts_title;
-	color: $primary;
-	width: 230px;
-	margin: 12px 0 36px 0;
+	z-index:10;
+	width: 250px;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position:absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 2px 0 6px rgba(0,0,0,.15);
+	font-weight:400;
+	background-color: white;
+	@media only screen and (max-width: $sm) {
+		left: -250px;
+	}
+	transition: all .3s ease-in-out;
+	.logo{
+		height:40px;
+		margin: 16px auto 0 18px;
+		@media only screen and (max-width: $sm) {
+			height:0;
+			margin: 0 0 0 0;
+		}
+	}
 	.back{
-		width: 100%;
+		margin-top:12px;
+		color:$primary;		
+		font-size:18px;
+		padding: 0 0 0 20px;
 		height: 50px;
-		line-height: 30px;
+		line-height: 50px;
+		@media only screen and (max-width: $sm) {
+			margin-top: 0;
+		}
+		.back-icon{
+			height:18px;
+			margin: 16px 4px 0 0px;
+			float:left;			
+		}
 	}
-	.back-icon{
-		display:inline-block;
-		height:16px;
-		margin:17px 12px;
-		fill: $primary;
-		float:left;
-	}
-
 	.menu-item{
 		width:100%;
-		font-size: 24px;
+		font-size: 18px;
 		cursor: pointer;
 		height: 50px;
+		color:$primary;
+		transition: all .15s ease-in-out;
 		&.selected{
-			background-color: $primary;
-			color:white;
-		&:hover{
-			background-color: $primary;
+			background-color: $primary_f3;
+			&:hover{
+				background-color: $primary_f3;
+			}
 		}
-		}
 		&:hover{
-			background-color: $primary_f4;
+			background-color: rgba(0,0,0,.05);
+		}
+		.menu-icon{
+			height:20px;
+			margin: 15px 16px 0 20px;
+			float:left;			
 		}
 		.menu-title{
-			margin: 0 0 0 16px;
-			float:left;
+			margin:0 0 0 0;
 			line-height: 50px;
+			display:inline-block;
 		}
-		.menu-subtitle{
-			font-size: 20px;
-			margin: 0 0 0 32px;
-			float:left;
-			line-height: 50px;
-		}
-	}
-	.submenu{
-		width: 100%;
-		span{
-			float:left;
-		}
-	}
-	.submenu-item{
-		height: 75px;
-		width:100%;
-		font-size: 20px;
-		.submenu-title{
-			margin: 0 0 0 42px;
-			float:left;
-			line-height: 50px;
-		}
-		.slider{
-			input{
-				float:right;
-				margin-right: 16px;
-			}
-			.slider-value{
-				font-size: 16px;
-				float:left;
-				margin-left: 42px;
-			}
-		}
-		.dragHandle{
-			height:20px;
-			width: 20px;
-			background-color: black;
+		.check-box{
+			float:right;
+			height:18px;
+			margin: 16px 20px 0 0;
 		}
 	}
 
 	.icon{
 		cursor: pointer;
-		height: 16px;
+		height: 18px;
 		float: right;
-		margin: 17px 16px;
+		margin: 13px 20px 0 0;
 		fill: $primary;
 		&.selected{
 			fill: white;
 		}
+	}
+
+	.number{
+		height: 24px;
+		width: 24px;
+		border-radius: 12px;
+		background-color: $primary;
+		color:white;
+		float:right;
+		font-size: 14px;
+		text-align: center;
+		line-height: 24px;
+		margin:11px 20px 0 0;
+	}
+
+	.divider{
+		margin: 12px 0;
+		height: 1px;
+		width: 100%;
+		background-color: $primary_f2;
 	}
 
 }

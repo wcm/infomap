@@ -1,53 +1,126 @@
 @import 'global';
+@keyframes hideshow {
+	0% { opacity: 0; }
+	15% { opacity: 1; }
+	65% { opacity: 1; }
+	80% { opacity: 0; }
+	100% { opacity: 0; }
+} 
+
 .maps-wrapper{
 	width: 100%;
-	height: 100%;
 	position: relative;
 	overflow: hidden;
 	.loading{
 		display:block;
 		position:absolute;
-		top:50%;
-		left:50%;
+		top: calc(50% - 50px);
+		left: calc(50% - 50px);
+		color:$primary;
+		font-size: 16px;
+		font-weight: 500;
+		width:100px;
+		text-align: center;
+		svg{
+			height:60px;
+			#r1{
+				fill:$primary_f2;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out 0s infinite;
+				-moz-animation: hideshow 2s ease-in-out 0s infinite;
+				-o-animation: hideshow 2s ease-in-out 0s infinite;
+				animation: hideshow 2s ease-in-out 0s infinite;
+			}
+			#r2{
+				fill:$secondary_f2;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .1s infinite;
+				-moz-animation: hideshow 2s ease-in-out .1s infinite;
+				-o-animation: hideshow 2s ease-in-out .1s infinite;
+				animation: hideshow 2s ease-in-out .1s infinite;
+			}
+			#r3{
+				fill:$primary_f1;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .2s infinite;
+				-moz-animation: hideshow 2s ease-in-out .2s infinite;
+				-o-animation: hideshow 2s ease-in-out .2s infinite;
+				animation: hideshow 2s ease-in-out .2s infinite;
+			}
+			#r4{
+				fill:$secondary_f3;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .3s infinite;
+				-moz-animation: hideshow 2s ease-in-out .3s infinite;
+				-o-animation: hideshow 2s ease-in-out .3s infinite;
+				animation: hideshow 2s ease-in-out .3s infinite;
+			}
+			#r5{
+				fill:$primary;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .4s infinite;
+				-moz-animation: hideshow 2s ease-in-out .4s infinite;
+				-o-animation: hideshow 2s ease-in-out .4s infinite;
+				animation: hideshow 2s ease-in-out .4s infinite;
+			}
+			#r6{
+				fill:$secondary_f1;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .5s infinite;
+				-moz-animation: hideshow 2s ease-in-out .5s infinite;
+				-o-animation: hideshow 2s ease-in-out .5s infinite;
+				animation: hideshow 2s ease-in-out .5s infinite;
+			}
+			#r7{
+				fill:$secondary;
+				opacity: 0;
+				-webkit-animation: hideshow 2s ease-in-out .6s infinite;
+				-moz-animation: hideshow 2s ease-in-out .6s infinite;
+				-o-animation: hideshow 2s ease-in-out .6s infinite;
+				animation: hideshow 2s ease-in-out .6s infinite;
+			}
+		}
 	}
 
 	.options{
 		height: 50px;
 		width: 100%;
+		text-align: center;
 		line-height: 50px;
-		font-size: 20px;
+		font-size: 16px;
 		font-family: $fonts_title;
 		color:$primary;
+		@media only screen and (max-width: $sm) {
+			font-size: 14px;
+		}
+
 		.options-title{
+			display: inline-block;
 			line-height: 50px;
-			font-size: 20px;
-			float: left;
-			margin-right: 16px;
+			margin-right: 4px;
 		}
 		.options-item{
+			display: inline-block;
 			line-height: 26px;
-			font-size: 16px;
 			cursor: pointer;
-			float: left;
-			margin: 12px 6px;
+			margin: 12px 4px;
 			padding: 0 12px;
 			border: 1px solid $primary;
-			border-radius: 4px;
+			border-radius: 6px;
 		    &.selected{
 				background-color: $primary;
 				color: white;
 			}
 		}
 		.options-button{
+			display: inline-block;
 			color:$primary;
 			line-height: 26px;
-			font-size: 16px;
 			cursor: pointer;
-			float: left;
 			margin: 12px 6px;
 			padding: 0 12px;
 			border: 1px solid $primary;
-			border-radius: 4px;
+			border-radius: 6px;
 			&:active{
 				background-color: $primary;
 				color: white;				

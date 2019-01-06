@@ -1,16 +1,29 @@
 @import 'global';
-.content-wrapper{
-	width: 100%;
+.select-wrapper{
+	width: calc(100% - 250px);
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 250px;
+	@media only screen and (max-width: $sm) {
+		width: 100%;
+		height: calc(100% - 60px);
+		top: 60px;
+		left: 0;
+	}
 	.map {
 		width: 100%;
-		height: 600px;
+		height: 100%;
 		position: relative;
 	}
 	.control{
 		z-index: 1;
 		position: absolute;
-		left: 10px;
-		top:60px;
+		right: 16px;
+		top:68px;
+		box-shadow: none;
+		border: solid 1px $primary;
+		border-radius: 6px;		
 	}
 	.selector{
 		z-index: 0;
@@ -31,51 +44,161 @@
 			background-color: rgba(0,0,0,.15);
 		}
 	}
-	.area-number{
-		float:left;
-		margin: 32px 24px 0;
-		font-size: 18px;
-		font-weight: 300;
-		color:$primary;
+	.mapboxgl-ctrl-top-right{
+		margin: 6px 6px 0 0;	
 	}
-	.area-indicator{
-		margin: 28px 0 0;
-		float: left;
-		z-index: 1;
-		position:relative;
-		height:30px;
-		width: 200px;
-		outline: solid 1px $primary;
-		.area-indicator-fill{
-			z-index: 2;
-			position:absolute;
-			top:0;
-			left: 0;
-			box-shadow: inset 0 0 0 2px white;
-			height:30px;
-			background-color: $primary;
+	.mapboxgl-ctrl-geocoder{
+		height:40px;
+		box-shadow: none;
+		border: solid 1px $primary;
+		border-radius: 6px;	
+		input{
+			height:38px;
+			padding: 6px 10px 8px 36px;	
+			font-size: 14px;
+			color: $primary;
+			transition: .2s ease-in-out;
 		}
-		.area-exceed{
-			background-color: rgba(0,0,0,.4);
+		input:focus{
+			outline: none;
+			box-shadow: 0 0 6px $primary;
 		}
 	}
-	.proceed-button{
-		margin: 18px 0;
-		float: right;
+}
+.sidebar-main-wrapper{
+	z-index:10;
+	width: 250px;
+	height: 100%;
+	overflow: auto;
+	position:absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 2px 0 6px rgba(0,0,0,.15);
+	background-color: white;
+	@media only screen and (max-width: $sm) {
+		left: -250px;
 	}
-	.proceed-alert{
-		float:right;
-		font-weight: 300;
-		margin: 18px;
-		line-height: 50px;
-		&.red{
-			color:red;
+	transition: all .3s ease-in-out;
+	.logo{
+		height:40px;
+		margin: 16px auto 0 18px;
+		@media only screen and (max-width: $sm) {
+			height:0;
+			margin: 0 0 0 0;
 		}
-		&.green{
-			color:green;
+	}
+	.coordinates{
+		margin: 24px 20px;
+		color: $primary;
+		font-size: 14px;
+		.parameter{
+			height: 28px;
+			line-height: 28px;
+			margin-bottom: 12px;
+			input{
+				float: right;
+				width: 100px;
+				height: 24px;
+				border: solid 1px $primary;
+				border-radius: 6px;
+				padding-left: 12px;
+				font-size: 14px;
+				color: $primary;
+				transition: .2s ease-in-out;
+			}
+			input:focus{
+				outline: none;
+				box-shadow: 0 0 6px $primary;
+			}
+			input[type=number]::-webkit-inner-spin-button {
+				opacity: 1;
+				outline: none;
+			}
 		}
 	}
-	.row{
-		width: 100%;
+	.area{
+		margin: 40px 20px 0;
+		.area-indicator{
+			width: 210px;
+			height: 210px;
+			position:relative;
+			outline: dashed 1px $primary;
+			.area-indicator-fill{
+				position:absolute;
+				background-color: $primary_f1;
+			}
+			.limit{
+				z-index: 2;
+				position:absolute;
+				top:8px;
+				right:8px;
+				color: $primary;
+				font-weight: 600;
+				font-size: 14px;
+			}
+		}
+
+		.area-indicator-exceed{
+			width: 210px;
+			height: 210px;
+			position:relative;
+			background-color: $secondary_f3;
+			.area-indicator-fill-exceed{
+				position:absolute;
+				outline: dashed 1px $primary;
+			}
+			.limit-exceed{
+				z-index: 2;
+				position:absolute;
+				color: $primary;
+				font-weight: 600;
+				font-size: 14px;
+			}
+		}
+
+		.area-number{
+			width: 100%;
+			margin: 12px 0;
+			font-size: 16px;
+			color:$primary;
+		}
+		.proceed-alert{
+			margin-top:12px;
+			font-size: 14px;
+			color:$secondary_f1;
+ 		}
 	}
+}
+.navbar{
+	display:none;
+	@media only screen and (max-width: $sm) {
+		display:block;
+	}
+	width: 100%;
+	height: 60px;
+	box-shadow: 2px 0 6px rgba(0,0,0,.15);
+	text-align: center;
+	position:absolute;
+	top: 0;
+	left: 0;
+	.logo{
+		display:inline-block;
+		height:40px;	
+		margin-top:12px;	
+	}
+	.icon{
+		position:absolute;
+		top: 18px;
+		left: 20px;
+		height: 24px;
+		cursor: pointer;
+	}
+}
+.mask{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0,.4)
 }

@@ -22,23 +22,36 @@ class D3Layers extends React.Component {
 			arcs:[0],
 			regions:[""],
 			options : {
-			"POI Map": "Short Links",
-			"Nolli Map": "None",
-			"Visibility": "Both",
-			"Traffic": "Both",
-			"Natural Elements": "",
+				"POI Map": "Short Links",
+				"Nolli Map": "None",
+				"Visibility": "Both",
+				"Traffic": "Both",
+				"Natural Elements": "",
 			},
+			pixratio: 1,
 		}
 	}
 	
 	componentDidMount() {
 		this.updateStates();
+    	window.addEventListener("resize", this.resize);
 	}
+
+  	componentWillUnmount() {
+    	window.removeEventListener("resize", this.resize);
+  	}
+
 	componentDidUpdate(prevProps) {
 		if(this.props.rawdata !== prevProps.rawdata){
 			this.resetLoading();
 			this.updateStates();
 		}
+	}
+
+	resize = () => {
+		this.setState({
+			pixratio: this.container.offsetWidth/this.state.width
+		});
 	}
 
 	getDistance = (lat1, lon1, lat2, lon2) => {
@@ -199,7 +212,6 @@ class D3Layers extends React.Component {
 						relations[id].tag.footprint = area.toFixed(2);						
 					}
 				})
-				this.addLoading(100);
 			}
 
 			var selected = [];
@@ -243,7 +255,6 @@ class D3Layers extends React.Component {
 	    	}
 
 	
-			this.pixratio = this.container.offsetWidth/width;
 			this.ratio = ratio;
 			this.selected = selected;
 			this.longLinks = longLinks;
@@ -254,14 +265,11 @@ class D3Layers extends React.Component {
 				nodes: nodes,
 				ways: ways,
 				relations: relations,
-				humans: [[Math.random() * width * this.pixratio, Math.random() * height * this.pixratio]],
+				humans: [[Math.random() * width * this.container.offsetWidth/width, Math.random() * height * this.container.offsetWidth/width]],
+				pixratio:this.container.offsetWidth/width,
 			});
-
-
-			console.log(nodes);
-			console.log(ways);
-			console.log(relations);
-			console.log(ratio);
+			
+			this.addLoading(50);
 
 	}
 
@@ -339,7 +347,7 @@ class D3Layers extends React.Component {
 		var newhumans = this.state.humans;
 		var newarcs = this.state.arcs;
 		var newregions = this.state.regions;
-		newhumans.push([Math.random() * this.state.width * this.pixratio, Math.random() * this.state.height * this.pixratio]);
+		newhumans.push([Math.random() * this.state.width * this.state.pixratio, Math.random() * this.state.height * this.state.pixratio]);
 		newarcs.push(0);
 		newregions.push("");
 		this.setState({
@@ -429,7 +437,7 @@ class D3Layers extends React.Component {
 				elng = {this.props.elng}
 				key = "Visibility"
 				option = {this.state.options["Traffic"]}
-				ratio = {this.pixratio}
+				ratio = {this.state.pixratio}
 				lengthratio = {this.ratio}
 			/>;
 
@@ -474,6 +482,7 @@ class D3Layers extends React.Component {
 			}
 		}
 
+
 		return(
 			<div className="maps-wrapper" ref={el => (this.container = el)}>
 				<div className="options">
@@ -481,7 +490,21 @@ class D3Layers extends React.Component {
 				</div>
 				<svg version="1.1" viewBox={`0 0 ${this.state.width} ${this.state.height}`} style = {{width: "100%"}}/>
 
-				<div className={this.state.loading === 100?"hide":"loading"}>Loading... </div>
+				<div className={this.state.loading === 100?"hide":"loading"}>
+					<svg version="1.1" x="0px" y="0px"viewBox="0 0 110 110">
+						<path id="r5" d="M37.2,39.9l5,8.7l19.1-11c1-0.6,1.3-1.8,0.7-2.7l-5-8.7l-19.1,11
+							C37,37.8,36.6,39,37.2,39.9z"/>
+						<path id="r3" d="M108,70.6c1-0.6,1.3-1.8,0.7-2.7l-31-53.7l-17.3,10l5,8.7c1.7,2.9,0.7,6.5-2.2,8.2
+							l-19.1,11l4,6.9l12.1-7c2.9-1.7,6.5-0.7,8.2,2.2l17,29.4L108,70.6z"/>
+						<path id="r7" d="M62.3,55.5l-12.1,7l18,31.2l13.9-8L65,56.2C64.5,55.2,63.3,54.9,62.3,55.5z"/>
+						<rect id="r6" x="16.6" y="60.5" transform="matrix(0.866 -0.5 0.5 0.866 -28.17 23.9398)" width="28" height="8"/>
+						<path id="r1" d="M58.4,20.8l17.3-10l-5-8.7c-0.6-1-1.8-1.3-2.7-0.7l-15.6,9L58.4,20.8z"/>
+						<path id="r2" d="M42.2,108.6l22.5-13l-18-31.2l-24.2,14l17,29.4C40,108.9,41.2,109.2,42.2,108.6z"/>
+						<path id="r4" d="M2.2,39.4c-1,0.6-1.3,1.8-0.7,2.7l13,22.5l24.2-14l-5-8.7c-1.7-2.9-0.7-6.5,2.2-8.2
+							l19.1-11l-6-10.4L2.2,39.4z"/>
+					</svg>
+					Loading
+				</div>
 				
 				{this.props.selected === "Overlay"?
 					ovl

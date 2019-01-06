@@ -17,15 +17,11 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 ReactDOM.render((
 <Router>
 	<ScrollToTop>
-		<div className = 'content'>
-			<Header/>
 			<Route exact path = {process.env.PUBLIC_URL + '/'} component = {SelectArea} />
 			<Route exact path = {process.env.PUBLIC_URL + '/:lng/:lat'} component = {SelectArea} />
 			<Route exact path = {process.env.PUBLIC_URL + '/help'} component = {Help} />
 			<Route exact path = {process.env.PUBLIC_URL + '/about'} component = {About} />
 			<Route exact path = {process.env.PUBLIC_URL + '/selected/:wlng/:slat/:elng/:nlat'} component = {Maps}/>
-			<Footer/>
-		</div>
 	</ScrollToTop>
 </Router>
 ), document.getElementById('root'));

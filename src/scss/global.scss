@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Didact+Gothic|Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i');
 
-$fonts_global: 'Roboto', sans-serif;
-$fonts_title: 'Didact Gothic', sans-serif;
+$fonts_global: Helvetica Neue,Helvetica,Arial,sans-serif; 
+$fonts_title: Helvetica Neue,Helvetica,Arial,sans-serif; 
 
 $primary: #273c92;
-$primary_f1: #5263a8;
-$primary_f2: #7d8abe;
-$primary_f3: #a9b1d3;
+$primary_f1: #7693D3;
+$primary_f2: #BBCEEA;
+$primary_f3: #D6E2F4;
 $primary_f4: #d4d8e9;
 
 $primary80: rgba(39, 60, 146, .8);
@@ -15,3 +15,10 @@ $primary40: rgba(39, 60, 146, .4);
 $primary20: rgba(39, 60, 146, .2);
 
 $active: #f15c22;
+
+$secondary: #803535;
+$secondary_f1: #EB4040;
+$secondary_f2: #FF8787;
+$secondary_f3: #FFC8C2;
+
+$sm: 768px;

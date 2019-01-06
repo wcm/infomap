@@ -10,9 +10,5 @@
 	"Traffic":{
 		"title":"Display:",
 		"options":["Both", "Roads", "Public Transport"]
-	},
-	"Overlay":{
-		"title":"Options:",
-		"options":[]
 	}
 }

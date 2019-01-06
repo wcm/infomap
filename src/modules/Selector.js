@@ -7,7 +7,7 @@ class Selector extends Component {
 		super(props);
 		this.state = {
 			width: 0,
-			height: 600,
+			height: 0,
 			dragging: false,
 			mouseX: this.props.x,
 			mouseY: this.props.y
@@ -24,7 +24,10 @@ class Selector extends Component {
 	}
 
 	updateWindowDimensions = () => {
-	  this.setState({ width: window.innerWidth*0.9 });
+	  this.setState({ 
+	  	width: this.container.offsetWidth,
+	  	height: this.container.offsetHeight
+	  });
 	}
 	
 	updateXY = (handlerID, e, { deltaX, deltaY }) => {
@@ -76,7 +79,7 @@ class Selector extends Component {
 		const divWidth = this.state.width;
 		const divHeight = this.state.height;
 		return (
-			<div className='selector'>
+			<div className='selector' ref={el => (this.container = el)}>
 				<div className='shader'
 					style={{
 						position: 'absolute',

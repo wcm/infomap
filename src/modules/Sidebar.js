@@ -15,6 +15,7 @@ class Sidebar extends React.Component {
   };
 
   changeMap = (key) => {
+    this.props.foldSidebar();
   	this.props.changeMap(key);
   }
 
@@ -40,21 +41,15 @@ class Sidebar extends React.Component {
     layers.forEach((record, index) => {
       content.push(
 		      <div className={record === selected?"menu-item selected":"menu-item"} key={`${record}`} onClick={() => this.changeMap(record)}>
-
-		      	<div className = "menu-subtitle">
+            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/${record}.svg`}/>
+		      	<div className = "menu-title">
 		        	{record}
 		        </div>
 		        {added[record]?
-				    <svg version="1.1" viewBox="0 0 80 80" className={record === selected?"icon selected":"icon"} onClick={(e) => this.removeOverlay(e, record)}>
-						<path id="XMLID_6_" d="M74,45H6c-2.8,0-5-2.2-5-5s2.2-5,5-5h68c2.8,0,5,2.2,5,5S76.8,45,74,45z"/>
-					</svg>
-				:
-			        <svg version="1.1" viewBox="0 0 80 80" className={record === selected?"icon selected":"icon"} onClick={(e) => this.addOverlay(e, record)}>
-						<path d="M74,35H45V6c0-2.8-2.2-5-5-5s-5,2.2-5,5v29H6c-2.8,0-5,2.2-5,5c0,2.8,2.2,5,5,5h29v29c0,2.8,2.2,5,5,5s5-2.2,5-5V45h29
-							c2.8,0,5-2.2,5-5C79,37.2,76.8,35,74,35z"/>
-					</svg>
-				}
-				<div className="clearfix"/>
+              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/check.svg`} onClick={(e) => this.removeOverlay(e, record)}/>
+    				:
+              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/uncheck.svg`} onClick={(e) => this.addOverlay(e, record)}/>
+    				}
 		      </div>
       );
     });
@@ -63,26 +58,35 @@ class Sidebar extends React.Component {
 
   render() {
 	var content = this.renderMenu();
-	console.log(this.props.longitude);
+    var count = 0;
+    for (var key in this.props.added){
+      if (this.props.added[key]){count ++};
+    }
     return (
-      <div className="menu">
-		<Link to={`${process.env.PUBLIC_URL}/${this.props.longitude}/${this.props.latitude}`} className="back">
-			<svg version="1.1" viewBox="0 0 80 80" className="back-icon">
-				<path id="XMLID_7_" d="M74,35H18.1l23.5-23.5c2-2,2-5.1,0-7.1c-2-2-5.1-2-7.1,0l-32,32c0,0,0,0,0,0C2.2,36.7,2,37,1.8,37.2
-				c-0.1,0.1-0.1,0.3-0.2,0.4c-0.1,0.2-0.2,0.3-0.2,0.5c-0.1,0.2-0.1,0.3-0.2,0.5c0,0.1-0.1,0.3-0.1,0.4c-0.1,0.6-0.1,1.3,0,2
-				c0,0.1,0.1,0.3,0.1,0.4c0.1,0.2,0.1,0.3,0.2,0.5c0.1,0.2,0.2,0.3,0.2,0.5c0.1,0.1,0.1,0.3,0.2,0.4C2,43,2.2,43.3,2.5,43.5l32,32
-				c1,1,2.3,1.5,3.5,1.5s2.6-0.5,3.5-1.5c2-2,2-5.1,0-7.1L18.1,45H74c2.8,0,5-2.2,5-5S76.8,35,74,35z"/>
-			</svg>
-			<div className = "title">Change Location</div>
-		</Link>
-		<div className="clearfix"/>
-		{content}
-        <div className={this.props.selected === "Overlay"?"menu-item selected":"menu-item"} onClick={() => this.changeMap("Overlay")}>
-	      	<div className = "menu-title">
-	        	Overlay
-	        </div>
-	    </div>
-
+      <div className="menu" style={this.props.style}>
+        <div className="footer-wrapper">
+          <img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'}/>
+      		<Link to={`${process.env.PUBLIC_URL}/${this.props.longitude}/${this.props.latitude}`}>
+      			<div className = "back">
+              <img className = "back-icon" src={process.env.PUBLIC_URL + '/image/icon/back.svg'}/>
+              Change Location
+            </div>
+      		</Link>
+      		{content}
+          <div className='divider'/>
+          <div className={this.props.selected === "Overlay"?"menu-item selected":"menu-item"} onClick={() => this.changeMap("Overlay")}>
+            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/Overlay.svg`}/>
+  	      	<div className = "menu-title">
+  	        	Overlay
+  	        </div>
+            <div className = "number">{count}</div>
+          </div>
+          <div className="push"/>
+        </div>
+        <div className='sidebar-footer'>
+          <div className='footer-tab'>About</div>
+          <div className='footer-tab'>Help</div>
+        </div>
       </div>
     );
   }
