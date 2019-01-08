@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 class TrafficMap extends React.Component {
 	constructor(props: Props) {
@@ -56,7 +55,7 @@ class TrafficMap extends React.Component {
 
 	render() {
 		let content = [[], [], [], [], [], []];
-		var {width, height, nodes, ways, relations} = this.props;
+		var {width, height, ways, relations} = this.props;
 		var ratio = this.props.lengthratio;
 		var info = this.state.info;
 
@@ -71,7 +70,7 @@ class TrafficMap extends React.Component {
 			},
 			{
 				color: "#f47d4e",
-				strokeWidth: "10"
+				strokeWidth: "8"
 			},
 			{
 				color: "#f79d7a",
@@ -156,15 +155,6 @@ class TrafficMap extends React.Component {
 
 			}
 	    };
-
-
-{/*	    for (id in nodes) {
-	    	if (nodes[id].tag.highway){
-				content.push(
-					<circle cx={nodes[id].x} cy={nodes[id].y} r="3" fill="red" stroke="white" strokeWidth=".5" key={id} onMouseEnter={this.showTooltip.bind(this, nodes[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
-				)
-			}
-	    }; */}
 
 		var text = [];
 		for (var key in info){

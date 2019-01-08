@@ -13,9 +13,9 @@ class MapSelection extends Component {
 	    super(props);
 	    var latitude = 48.13832;
 	    var longitude = 11.57440;
-	    if (this.props.match.params.latitude && this.props.match.params.longitude){
-	    	latitude = parseFloat(this.props.match.params.latitude);
-	    	longitude = parseFloat(this.props.match.params.longitude);
+	    if (this.props.match.params.lat && this.props.match.params.lng){
+	    	longitude = parseFloat(this.props.match.params.lng);
+	    	latitude = parseFloat(this.props.match.params.lat);
 	    }
 	    this.state = {
 	    	viewport: {
@@ -83,7 +83,6 @@ class MapSelection extends Component {
 		  	width: newViewport.width,
 		  	height: newViewport.height
 		})
-		console.log(newViewport);
     	this.handleViewportChange(newViewport);
   	}
 
@@ -116,7 +115,7 @@ class MapSelection extends Component {
   	}
 
   	handleOnResult = (event) => {
-    	console.log(event.result);
+//    	console.log(event.result);
   	}
 
   	handleGeocoderViewportChange = (viewport) => {
@@ -228,7 +227,7 @@ class MapSelection extends Component {
 		    </div>
 			<div className = "sidebar-main-wrapper" style={sidebarStyle}>
 				<div className="footer-wrapper">
-				<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'}/>
+				<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'} alt="infomap"/>
 			    <div className = "coordinates">
 			    	<div className = "parameter">
 					    Longitude:
@@ -289,8 +288,8 @@ class MapSelection extends Component {
 		    </div>
 
 	    	<div className ='navbar'>
-				<img className = "icon" src={process.env.PUBLIC_URL + '/image/icon/menu.svg'} onClick={this.expandSidebar}/>
-				<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'}/>
+				<img className = "icon" src={process.env.PUBLIC_URL + '/image/icon/menu.svg'} onClick={this.expandSidebar} alt='menu'/>
+				<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'} alt='infomap'/>
 	    	</div>
 	    	<div className={this.state.sidebar?'mask':'hide'} onClick={this.foldSidebar}/>
 

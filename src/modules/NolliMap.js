@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Pie from "./Pie";
 
 class NolliMap extends React.Component {
 	constructor(props: Props) {
@@ -60,8 +60,12 @@ class NolliMap extends React.Component {
 
 	render() {
 		let content = [];
-		var {width, height, nodes, ways, relations} = this.props;
+		var {width, height, ways, relations} = this.props;
 		var info = this.state.info;
+		var totalFootprint = 0;
+		var footprintPro = [0,0,0,0,0,0];
+		var totalFloor = 0;
+		var floorPro = [0,0,0,0,0,0]
 		const styles = [
 			{
 				fill: "#ad4a00",
@@ -104,8 +108,10 @@ class NolliMap extends React.Component {
 		    		}
 	    		})
 
+	    		levels = relations[id].tag["building:levels"];
+		    	cat = this.getBuildingCat(relations[id].tag.building);
+
 	    		if (this.props.option === "Height"){
-	    			levels = relations[id].tag["building:levels"];
 	    			if (levels){
 		    			color = `rgba(0,0,255,${levels/10})`;
 			    		content.push(
@@ -121,7 +127,6 @@ class NolliMap extends React.Component {
 			    		);
 		    		}
 		    	}else if (this.props.option === "Program"){
-		    		cat = this.getBuildingCat(relations[id].tag.building);
 			    	content.push(
 			    		<path d={shapes} fillRule="evenodd" fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, relations[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}>
 			    			<title>{id}</title>
@@ -134,6 +139,11 @@ class NolliMap extends React.Component {
 			    		</path>
 			    	);
 		    	}
+	    		totalFootprint += parseFloat(relations[id].tag.footprint);
+	    		footprintPro[cat] += parseFloat(relations[id].tag.footprint);
+	    		totalFloor += parseFloat(relations[id].tag.footprint) * levels;
+	    		floorPro[cat] += parseFloat(relations[id].tag.footprint) * levels;
+
 			}
 
 	    };
@@ -145,8 +155,9 @@ class NolliMap extends React.Component {
 
 	    		var pts = ways[id].points.map(e => e.join(',')).join(' ');
 		    	color = "rgba(60,60,60)";
+		    	levels = ways[id].tag["building:levels"];
+				cat = this.getBuildingCat(ways[id].tag.building);
 	    		if (this.props.option === "Height"){
-		    		levels = ways[id].tag["building:levels"];
 	    			if (levels) {
 		    			color = `rgba(0,0,255,${levels/10})`;
 			    		content.push(
@@ -158,7 +169,6 @@ class NolliMap extends React.Component {
 			    		)	    			
 		    		}
 		    	}else if (this.props.option === "Program"){
-					cat = this.getBuildingCat(ways[id].tag.building);
 		    		content.push(
 			    		<polygon points={pts} fill={styles[cat].fill} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    	)
@@ -168,17 +178,18 @@ class NolliMap extends React.Component {
 			    		<polygon points={pts} fill={color} stroke="white" strokeWidth=".5" key={id} className="nolli-building" onMouseEnter={this.showTooltip.bind(this, ways[id].tag)} onMouseLeave={this.hideTooltip.bind(this)}/>
 			    	)
 		    	}
+
+	    		totalFootprint += parseFloat(ways[id].tag.footprint);
+	    		footprintPro[cat] += parseFloat(ways[id].tag.footprint);
+	    		totalFloor += parseFloat(ways[id].tag.footprint) * levels;
+	    		floorPro[cat] += parseFloat(ways[id].tag.footprint) * levels;
+
 			}
 	    };
 
-/*	    for (var id in nodes) {
-	    	if (nodes[id].tag != {}){
-				content.push(
-					<circle cx={nodes[id].x} cy={nodes[id].y} r="2" fill="red" key={id}/>
-				)
-			}
-	    };
-*/
+	    var totalArea = this.props.width * this.props.height / this.props.lengthratio / this.props.lengthratio;
+	    var unbuilt = totalArea - totalFootprint;
+
 		var text = [];
 		for (var key in info){
 			if(!(key === "building" && info[key] === "yes")){
@@ -202,11 +213,43 @@ class NolliMap extends React.Component {
 				right: "0"
 			}
 		}
+
+		var radius = 60;
+		console.log(footprintPro);
+
 		return(
 			<div className="nollimap">
-				<svg version="1.1" viewBox={`0 0 ${width} ${height}`} style = {{width: this.state.width}}>
+				<svg version="1.1" viewBox={`0 0 ${width} ${height}`}>
 					{content}
 				</svg>
+				{totalFootprint != 0?
+					<div className="charts">
+						<Pie 
+							title={"Building footprint"}
+							tags={["Built", "Unbuilt"]}
+							height = {0}
+						    innerRadius={radius * .35}
+						    outerRadius={radius}
+						    cornerRadius={2}
+						    padAngle={.02}
+						    data={[totalFootprint, unbuilt]} 
+						    styles={[{fill:"rgba(60, 60, 60)"},{fill:"rgba(200, 200, 200)"}]}
+						/>
+						<Pie 
+							title={"Total floor area by program"}
+							tags={["Residential", "Commercial", "Religious", "Civic", "Others", "Unknown"]}
+							height = {0}
+						    innerRadius={radius * .35}
+						    outerRadius={radius}
+						    cornerRadius={2}
+						    padAngle={.02}
+						    data={footprintPro} 
+						    styles={styles}
+						/>
+					</div>
+				:
+					<div/>
+				}
 				<div className={this.state.tooltip? "tooltip":"hide"} style={tooltipstyle}>
 					<div className="tooltip-title">Building Details</div>
 					{text}

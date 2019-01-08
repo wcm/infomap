@@ -111,7 +111,7 @@ class MapsDemo extends React.Component {
 					getShuffled = {this.getShuffled}
 				/>
 				<div className="map-display">
-					{selected != "Overlay"?
+					{selected !== "Overlay"?
 						<img style={{position:"absolute", maxWidth: "100%"}}src={`${process.env.PUBLIC_URL}/image/demo/${selected}.png`} alt="selected" />
 					:
 						this.renderLayers()

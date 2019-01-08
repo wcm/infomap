@@ -87,17 +87,17 @@
 		width: 100%;
 		text-align: center;
 		line-height: 50px;
-		font-size: 16px;
 		font-family: $fonts_title;
 		color:$primary;
-		@media only screen and (max-width: $sm) {
-			font-size: 14px;
-		}
 
 		.options-title{
 			display: inline-block;
 			line-height: 50px;
 			margin-right: 4px;
+			font-size: 16px;
+			@media only screen and (max-width: $sm) {
+				display: none;
+			}
 		}
 		.options-item{
 			display: inline-block;
@@ -107,6 +107,10 @@
 			padding: 0 12px;
 			border: 1px solid $primary;
 			border-radius: 6px;
+			font-size: 16px;
+			@media only screen and (max-width: $sm) {
+				font-size: 14px;
+			}
 		    &.selected{
 				background-color: $primary;
 				color: white;
@@ -117,10 +121,14 @@
 			color:$primary;
 			line-height: 26px;
 			cursor: pointer;
-			margin: 12px 6px;
+			margin: 12px 4px;
 			padding: 0 12px;
 			border: 1px solid $primary;
 			border-radius: 6px;
+			font-size: 16px;
+			@media only screen and (max-width: $sm) {
+				font-size: 14px;
+			}
 			&:active{
 				background-color: $primary;
 				color: white;				
@@ -202,6 +210,14 @@
 			width: 8px;
 			background-color: red;
 			border-radius: 50%;
+		}
+	}
+	.charts{
+		height: 200px;
+		width: 100%;
+		text-align: center;
+		svg{
+			display: inline-block;
 		}
 	}
 

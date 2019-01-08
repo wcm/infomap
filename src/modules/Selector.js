@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
-import Draggable, { DraggableCore }from 'react-draggable';
+import { DraggableCore }from 'react-draggable';
 
 class Selector extends Component {
 	constructor(props: Props) {

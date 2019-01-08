@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import { DraggableCore }from 'react-draggable';
 import {toRad, distSq, getArea} from "./helpers";
 
@@ -13,7 +12,7 @@ class VisibilityMap extends React.Component {
 	    this.angle = 2;
 
 		var buildings = "";
-		var {nodes, ways, relations} = this.props;
+		var {ways, relations} = this.props;
 
 	    for (var id in relations) {
 
@@ -65,7 +64,7 @@ class VisibilityMap extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-    	if (prevProps.ratio != this.props.ratio){
+    	if (prevProps.ratio !== this.props.ratio){
     		for (var key in this.props.humans){
     			this.props.setPos(key, [this.props.humans[key][0]*this.props.ratio/prevProps.ratio, this.props.humans[key][1]*this.props.ratio/prevProps.ratio])
     		}
@@ -144,7 +143,7 @@ class VisibilityMap extends React.Component {
 		var arcs = this.props.arcs;
 		var changed = false;
 		for (var key in arcs){
-			if (arcs[key]<360 && arcs[key] != -1){
+			if (arcs[key]<360 && arcs[key] !== -1){
 				changed = true;
 				var arc = arcs[key];
 				var region = regions[key];
@@ -188,7 +187,7 @@ class VisibilityMap extends React.Component {
 	}
 
 	render() {
-		var colors = ["rgba(255, 139, 0, .4)", "rgba(0, 139, 255, .2)", "rgba(139, 255, 0, .2)", "rgba(255, 0, 139, .2)", "rgba(0, 255, 139, .2"]
+		var colors = ["rgba(0, 255, 255, .4)", "rgba(255, 139, 0, .4)", "rgba(0, 139, 255, .2)", "rgba(139, 255, 0, .2)", "rgba(255, 0, 139, .2)", "rgba(0, 255, 139, .2"]
 		var regions = this.props.regions.map((region, index) => <path d={region} fill={colors[0]} stroke="red" strokeWidth="1" key={index} onMouseEnter={this.showTooltip.bind(this, region, index)} onMouseLeave={this.hideTooltip.bind(this)}/>);
 		var humans = this.props.humans.map((human, index) => <circle cx={human[0]/this.props.ratio} cy={human[1]/this.props.ratio} r="3" fill = "red" key={index}/>)
 		var handles = this.props.humans.map((human, index) => 				
@@ -219,7 +218,7 @@ class VisibilityMap extends React.Component {
 		return(
 			<div className="visibilitymap">
 				<svg version="1.1" viewBox={`0 0 ${this.props.width} ${this.props.height}`} ref={el => (this.container = el)}>
-					<path d={this.state.shaded} fill="#f15c22" stroke="none"/>
+					<path d={this.state.shaded} fill="#7693D3" stroke="none"/>
 					<path d={this.buildings} fillRule="evenodd" fill="rgba(0, 0, 0, .05)" stroke="rgba(60, 60, 60)" strokeWidth=".5"/>
 					<g>
 					{regions}

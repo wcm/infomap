@@ -1,7 +1,6 @@
 import React from "react";
 import {withRouter} from "react-router";
 import { Link } from "react-router-dom";
-import ReactDragList from 'react-drag-list';
 import '../scss/sidebar.scss'
 
 class Sidebar extends React.Component {
@@ -41,14 +40,14 @@ class Sidebar extends React.Component {
     layers.forEach((record, index) => {
       content.push(
 		      <div className={record === selected?"menu-item selected":"menu-item"} key={`${record}`} onClick={() => this.changeMap(record)}>
-            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/${record}.svg`}/>
+            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/${record}.svg`} alt='menu'/>
 		      	<div className = "menu-title">
 		        	{record}
 		        </div>
 		        {added[record]?
-              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/check.svg`} onClick={(e) => this.removeOverlay(e, record)}/>
+              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/check.svg`} onClick={(e) => this.removeOverlay(e, record)} alt='add'/>
     				:
-              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/uncheck.svg`} onClick={(e) => this.addOverlay(e, record)}/>
+              <img className = "check-box" src={`${process.env.PUBLIC_URL}/image/icon/uncheck.svg`} onClick={(e) => this.addOverlay(e, record)} alt='delete'/>
     				}
 		      </div>
       );
@@ -65,17 +64,17 @@ class Sidebar extends React.Component {
     return (
       <div className="menu" style={this.props.style}>
         <div className="footer-wrapper">
-          <img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'}/>
+          <img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'} alt='infomap'/>
       		<Link to={`${process.env.PUBLIC_URL}/${this.props.longitude}/${this.props.latitude}`}>
       			<div className = "back">
-              <img className = "back-icon" src={process.env.PUBLIC_URL + '/image/icon/back.svg'}/>
+              <img className = "back-icon" src={process.env.PUBLIC_URL + '/image/icon/back.svg'} alt='back'/>
               Change Location
             </div>
       		</Link>
       		{content}
           <div className='divider'/>
           <div className={this.props.selected === "Overlay"?"menu-item selected":"menu-item"} onClick={() => this.changeMap("Overlay")}>
-            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/Overlay.svg`}/>
+            <img className = "menu-icon" src={`${process.env.PUBLIC_URL}/image/icon/Overlay.svg`} alt='menu'/>
   	      	<div className = "menu-title">
   	        	Overlay
   	        </div>

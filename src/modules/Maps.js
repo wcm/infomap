@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import axios from 'axios';
 import D3Layers from "./D3Layers";
 import Sidebar from "./Sidebar";
@@ -84,9 +83,6 @@ class Maps extends React.Component {
 		var latitude = (parseFloat(this.bounds.nlat) + parseFloat(this.bounds.slat))/2;
 	    var sidebarStyle = {left: 0}
 	    if (window.innerWidth<768 && !this.state.sidebar){sidebarStyle={left:-250}};
-	    console.log(window.innerWidth);
-	    console.log(this.state.sidebar);
-	    console.log(sidebarStyle);
 		return (
 			<div className="maps">
 				<Sidebar
@@ -111,8 +107,8 @@ class Maps extends React.Component {
 					/>
 				</div>
 				<div className ='navbar'>
-					<img className = "icon" src={process.env.PUBLIC_URL + '/image/icon/menu.svg'} onClick={this.expandSidebar}/>
-					<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'}/>
+					<img className = "icon" src={process.env.PUBLIC_URL + '/image/icon/menu.svg'} onClick={this.expandSidebar} alt='menu'/>
+					<img className = "logo" src={process.env.PUBLIC_URL + '/image/infomap-logo.svg'} alt='infomap'/>
 		    	</div>
 		    	<div className={this.state.sidebar?'mask':'hide'} onClick={this.foldSidebar}/>
 

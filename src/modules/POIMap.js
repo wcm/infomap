@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 class POIMap extends React.Component {
 	constructor(props: Props) {
@@ -40,20 +39,20 @@ class POIMap extends React.Component {
 
 	render() {
 		let content = [];
-		var {nodes, ways, relations,width, height} = this.props;
+		var {width, height} = this.props;
 		var selected = this.props.selected;
 		var longLinks = this.props.longLinks;
 		var shortLinks = this.props.shortLinks;
 		var info = this.state.info;
 		
 		if(this.props.option === "Short Links"){
-			content.push(shortLinks.map((link) => <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} stroke="rgba(255, 0, 255, .3)" strokeWidth=".5"key={`${link.x1} ${link.y1} ${link.x2} ${link.y2}`}/>));
+			content.push(shortLinks.map((link) => <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} stroke="rgba(205, 0, 255, .3)" strokeWidth=".5"key={`${link.x1} ${link.y1} ${link.x2} ${link.y2}`}/>));
 		}
 		if(this.props.option === "Long Links"){
-			content.push(longLinks.map((link) => <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} stroke="rgba(255, 0, 255, .3)" strokeWidth=".5"key={`${link.x1} ${link.y1} ${link.x2} ${link.y2}`}/>));
+			content.push(longLinks.map((link) => <line x1={link.x1} y1={link.y1} x2={link.x2} y2={link.y2} stroke="rgba(205, 0, 255, .3)" strokeWidth=".5"key={`${link.x1} ${link.y1} ${link.x2} ${link.y2}`}/>));
 		}
 		
-		content.push(selected.map((node) => <circle cx={node.x} cy={node.y} r={2+node.shortLink/8} fill="red" key={`${node.x} ${node.y}`} onMouseEnter={this.showTooltip.bind(this, node.tag)} onMouseLeave={this.hideTooltip.bind(this)}/>));
+		content.push(selected.map((node) => <circle cx={node.x} cy={node.y} r={2+node.shortLink/20*this.props.lengthratio} fill="blue" key={`${node.x} ${node.y}`} onMouseEnter={this.showTooltip.bind(this, node.tag)} onMouseLeave={this.hideTooltip.bind(this)}/>));
 		
 		var text = [];
 		for (var key in info){
@@ -84,7 +83,7 @@ class POIMap extends React.Component {
 					{content}
 				</svg>
 				<div className={this.state.tooltip? "tooltip":"hide"} style={tooltipstyle}>
-					<div className="tooltip-title">Building Details</div>
+					<div className="tooltip-title">Node Details</div>
 					{text}
 				</div>
 			</div>

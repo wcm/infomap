@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import '../scss/analysis.scss';
 import NolliMap from "./NolliMap";
 import TrafficMap from "./TrafficMap";
@@ -412,6 +411,7 @@ class D3Layers extends React.Component {
 				wlng = {this.props.wlng}
 				elng = {this.props.elng}
 				option = {this.state.options["Nolli Map"]}
+				lengthratio = {this.ratio}
 				key = "Nolli Map"
 			/>;
 
@@ -488,7 +488,7 @@ class D3Layers extends React.Component {
 				<div className="options">
 					{optionbar}
 				</div>
-				<svg version="1.1" viewBox={`0 0 ${this.state.width} ${this.state.height}`} style = {{width: "100%"}}/>
+				<div style={{width:"100%", height:`${this.state.height*this.state.pixratio + 200}px`}}/>
 
 				<div className={this.state.loading === 100?"hide":"loading"}>
 					<svg version="1.1" x="0px" y="0px"viewBox="0 0 110 110">
@@ -511,6 +511,7 @@ class D3Layers extends React.Component {
 					:
 					maps[this.props.selected]
 				}
+
 			</div>
 		)
 	}
